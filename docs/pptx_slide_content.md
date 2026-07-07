@@ -5,8 +5,8 @@
 ---
 
 ## Slide: Team Details
-- **a. Team name:** _[fill in]_
-- **b. Team leader name:** _[fill in]_
+- **a. Team name:** Guardinger Advanced Technologies
+- **b. Team leader name:** Malay Doshi
 - **c. Problem Statement:** Track 04 — MSME Credit (Predictive AI, Risk Management)
 
 ---

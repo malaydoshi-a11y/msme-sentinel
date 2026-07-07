@@ -52,6 +52,17 @@ body {
   gap: 16px;
 }
 .brand { display: flex; align-items: center; gap: 14px; }
+.institution-logo {
+  width: 40px; height: 40px;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+.brand-divider {
+  width: 1px;
+  height: 34px;
+  background: var(--hairline);
+  flex-shrink: 0;
+}
 .brand-mark {
   width: 42px; height: 42px;
   border-radius: 10px;
@@ -76,6 +87,24 @@ body {
   margin-top: 2px;
   letter-spacing: 0.2px;
 }
+.topbar-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.dev-credit {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.dev-credit-label {
+  font-size: 10.5px;
+  letter-spacing: 0.5px;
+  color: var(--text-low);
+  text-transform: uppercase;
+}
+.dev-credit-logo { height: 15px; width: auto; }
 .search-wrap {
   position: relative;
   display: flex;

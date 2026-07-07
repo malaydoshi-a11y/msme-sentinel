@@ -1,6 +1,13 @@
+<p align="center">
+  <img src="dashboard/assets/idbi-bank-logo.svg" alt="IDBI Bank" height="56" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="dashboard/assets/guardinger-logo.svg" alt="Guardinger Advanced Technologies" height="48" />
+</p>
+
 # MSME Sentinel
 ### An Early-Warning System for MSME Credit Stress
 **IDBI Innovate 2026 — Track 04: MSME Credit Predictive AI Risk Management**
+**A prototype for IDBI Bank, developed by Guardinger Advanced Technologies**
 
 ---
 
@@ -101,8 +108,8 @@ The dashboard is a static site (HTML/CSS/JS + a JSON data file, no backend) — 
 
 ## Team
 
-- **Team name:** _[fill in]_
-- **Team leader:** _[fill in]_
+- **Team name:** Guardinger Advanced Technologies
+- **Team leader:** Malay Doshi
 - **Problem statement:** Track 04 — MSME Credit Default Prediction (Predictive AI Risk Management)
 
 ## Feasibility: what's adoptable now vs. later

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+  body { margin:0; background:#081E1B; font-family: 'IBM Plex Sans', Arial, sans-serif; }
+  .canvas { width:1400px; padding:50px 60px 60px; box-sizing:border-box; }
+  .title { color:#EDF4F1; font-size:22px; font-weight:600; margin-bottom:4px; letter-spacing:0.3px;}
+  .subtitle { color:#6E8983; font-size:13px; margin-bottom:30px; }
+
+  .screen-label {
+    display:flex; align-items:center; gap:10px; margin:0 0 12px;
+  }
+  .screen-num {
+    background:#E8672C; color:#081E1B; font-weight:700; font-size:11.5px;
+    border-radius:20px; padding:3px 11px; letter-spacing:0.3px;
+  }
+  .screen-title { color:#EDF4F1; font-size:15px; font-weight:600; }
+  .screen-sub { color:#6E8983; font-size:12px; }
+
+  .frame {
+    position:relative;
+    background:#0C2723; border:1px solid rgba(237,244,241,0.12); border-radius:14px;
+    padding:20px 22px; margin-bottom:16px;
+    display:flex; gap:18px; align-items:stretch;
+  }
+  .m-main { flex:1; min-width:0; }
+
+  /* mock topbar */
+  .m-topbar { display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid rgba(237,244,241,0.09); margin-bottom:16px; }
+  .m-brand { display:flex; align-items:center; gap:10px; }
+  .m-swatch { width:30px; height:30px; border-radius:7px; flex-shrink:0; }
+  .m-swatch.idbi { background:#007162; }
+  .m-swatch.ms { background:linear-gradient(135deg,#E8672C,#c94e1c); }
+  .m-divider { width:1px; height:24px; background:rgba(237,244,241,0.15); }
+  .m-text-lines .l1 { width:150px; height:9px; background:rgba(237,244,241,0.55); border-radius:3px; margin-bottom:6px; }
+  .m-text-lines .l2 { width:230px; height:7px; background:rgba(237,244,241,0.22); border-radius:3px; }
+  .m-topbar-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  .m-devcredit { display:flex; align-items:center; gap:6px; }
+  .m-devcredit .dot { width:16px; height:16px; border-radius:4px; background:#2547F2; }
+  .m-devcredit .txt { width:120px; height:8px; background:rgba(237,244,241,0.2); border-radius:3px; }
+  .m-search { width:220px; height:26px; border:1px solid rgba(237,244,241,0.15); border-radius:7px; background:#11322C; }
+
+  /* mock tabs */
+  .m-tabs { display:flex; gap:26px; margin-bottom:16px; border-bottom:1px solid rgba(237,244,241,0.09); }
+  .m-tab { font-size:12px; padding-bottom:9px; color:#A9C2BB; }
+  .m-tab.active { color:#EDF4F1; border-bottom:2px solid #E8672C; font-weight:600; }
+
+  /* rag tiles */
+  .m-tiles { display:flex; gap:12px; margin-bottom:14px; }
+  .m-tile { flex:1; background:#11322C; border:1px solid rgba(237,244,241,0.09); border-radius:10px; padding:12px 14px; border-left:3px solid; }
+  .m-tile.green { border-left-color:#34B378; }
+  .m-tile.amber { border-left-color:#E8A33D; }
+  .m-tile.red { border-left-color:#E1503F; }
+  .m-tile .lbl { font-size:9.5px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; margin-bottom:8px; }
+  .m-tile .val { font-family:monospace; font-size:20px; color:#EDF4F1; }
+
+  /* spectrum */
+  .m-spectrum { background:#11322C; border:1px solid rgba(237,244,241,0.09); border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+  .m-spectrum .lbl { font-size:9.5px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; margin-bottom:10px; }
+  .m-bars { display:flex; align-items:flex-end; gap:6px; height:46px; }
+  .m-bars div { flex:1; border-radius:3px 3px 0 0; }
+
+  /* table */
+  .m-table { background:#11322C; border:1px solid rgba(237,244,241,0.09); border-radius:10px; padding:10px 14px 14px; }
+  .m-table-head { display:flex; gap:14px; padding-bottom:8px; border-bottom:1px solid rgba(237,244,241,0.09); margin-bottom:8px; }
+  .m-table-head span { font-size:9px; letter-spacing:0.5px; color:#6E8983; text-transform:uppercase; }
+  .m-row { display:flex; align-items:center; gap:14px; padding:8px 0; border-bottom:1px solid rgba(237,244,241,0.06); }
+  .m-row .c { height:8px; background:rgba(237,244,241,0.18); border-radius:3px; }
+  .m-badge { display:inline-flex; align-items:center; gap:5px; font-size:9.5px; font-weight:600; padding:3px 8px; border-radius:14px; }
+  .m-badge .d { width:5px; height:5px; border-radius:50%; }
+  .m-badge.green { background:rgba(52,179,120,0.16); color:#34B378; }
+  .m-badge.amber { background:rgba(232,163,61,0.16); color:#E8A33D; }
+  .m-badge.red { background:rgba(225,80,63,0.16); color:#E1503F; }
+  .m-badge.green .d { background:#34B378; } .m-badge.amber .d { background:#E8A33D; } .m-badge.red .d { background:#E1503F; }
+
+  /* drawer mock */
+  .m-drawer {
+    flex-shrink:0; width:224px;
+    background:#0A1F1C; border:1px solid rgba(232,103,44,0.4); border-radius:10px;
+    padding:14px 16px;
+  }
+  .m-drawer .cap { font-size:9px; letter-spacing:1px; color:#E8672C; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
+  .m-drawer .big { font-family:monospace; font-size:30px; color:#34B378; margin-bottom:2px; }
+  .m-drawer .sub { font-size:9.5px; color:#6E8983; margin-bottom:12px; }
+  .m-drawer .chart { height:60px; background:#163B34; border-radius:7px; margin-bottom:12px; }
+  .m-drawer .rline { display:flex; align-items:center; gap:6px; padding:5px 0; border-bottom:1px solid rgba(237,244,241,0.06); }
+  .m-drawer .rline .rd { width:5px; height:5px; border-radius:50%; background:#E8A33D; }
+  .m-drawer .rline .rt { flex:1; height:7px; background:rgba(237,244,241,0.16); border-radius:3px; }
+
+  .callout {
+    display:flex; gap:10px; align-items:flex-start;
+    margin-top:10px; padding:10px 14px; border:1px dashed rgba(232,103,44,0.5); border-radius:9px;
+    color:#E8A99A; font-size:11.5px; line-height:1.5;
+  }
+  .callout .pill { flex-shrink:0; display:inline-block; background:rgba(232,103,44,0.15); color:#E8672C; padding:3px 9px; border-radius:20px; font-size:9.5px; font-weight:600; letter-spacing:0.4px; }
+
+  /* governance */
+  .gov-primary { background:#163B34; border-radius:9px; padding:14px 16px; margin-bottom:12px; display:flex; align-items:center; gap:16px; }
+  .gov-primary .lbl2 { font-size:9px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; }
+  .gov-primary .num { font-family:monospace; font-size:34px; color:#E8672C; }
+  .gov-primary .desc { font-size:11.5px; color:#EDF4F1; }
+  .gov-grid { display:flex; gap:12px; margin-bottom:12px; }
+  .gov-card { flex:1; background:#163B34; border-radius:9px; padding:10px 12px; }
+  .gov-card .v { font-family:monospace; font-size:16px; color:#EDF4F1; }
+  .gov-card .l { font-size:9.5px; color:#A9C2BB; margin-top:3px; }
+</style></head>
+<body>
+<div class="canvas">
+  <div class="title">MSME Sentinel — Wireframes / Mock Diagrams of the Proposed Solution</div>
+  <div class="subtitle">Track 04 &middot; MSME Credit Default Prediction — IDBI Innovate 2026 &middot; low-fidelity UX layout, annotated with the design decisions behind each region</div>
+
+  <div class="screen-label">
+    <span class="screen-num">SCREEN 1 / 2</span>
+    <span class="screen-title">Portfolio View</span>
+    <span class="screen-sub">&mdash; default landing screen, built for the loan officer's daily workflow</span>
+  </div>
+
+  <div class="frame">
+   <div class="m-main">
+    <div class="m-topbar">
+      <div class="m-brand">
+        <div class="m-swatch idbi"></div>
+        <div class="m-divider"></div>
+        <div class="m-swatch ms"></div>
+        <div class="m-text-lines"><div class="l1"></div><div class="l2"></div></div>
+      </div>
+      <div class="m-topbar-right">
+        <div class="m-devcredit"><div class="dot"></div><div class="txt"></div></div>
+        <div class="m-search"></div>
+      </div>
+    </div>
+    <div class="m-tabs">
+      <div class="m-tab active">Portfolio View</div>
+      <div class="m-tab">Model Governance</div>
+    </div>
+
+    <div class="m-tiles">
+      <div class="m-tile green"><div class="lbl">Green &middot; Standard</div><div class="val">30%</div></div>
+      <div class="m-tile amber"><div class="lbl">Amber &middot; SMA-0/1</div><div class="val">30%</div></div>
+      <div class="m-tile red"><div class="lbl">Red &middot; SMA-2</div><div class="val">40%</div></div>
+    </div>
+
+    <div class="m-spectrum">
+      <div class="lbl">Portfolio Risk Rank Spectrum &middot; 1&ndash;10, CIBIL-MSME-Rank-style</div>
+      <div class="m-bars">
+        <div style="height:38%;background:#34B378"></div>
+        <div style="height:55%;background:#34B378"></div>
+        <div style="height:70%;background:#34B378"></div>
+        <div style="height:48%;background:#E8A33D"></div>
+        <div style="height:62%;background:#E8A33D"></div>
+        <div style="height:44%;background:#E8A33D"></div>
+        <div style="height:80%;background:#E1503F"></div>
+        <div style="height:95%;background:#E1503F"></div>
+        <div style="height:65%;background:#E1503F"></div>
+        <div style="height:40%;background:#E1503F"></div>
+      </div>
+    </div>
+
+    <div class="m-table">
+      <div class="m-table-head">
+        <span style="width:70px">Borrower</span><span style="width:90px">Loan Type</span>
+        <span style="width:110px">Segment</span><span style="width:60px">Vintage</span>
+        <span style="width:110px">Loan Amt</span><span style="width:60px">Rank</span><span style="width:100px">Status</span>
+      </div>
+      <div class="m-row">
+        <div class="c" style="width:70px"></div><div class="c" style="width:90px"></div>
+        <div class="c" style="width:110px"></div><div class="c" style="width:60px"></div>
+        <div class="c" style="width:110px"></div><div class="c" style="width:24px"></div>
+        <span class="m-badge green"><span class="d"></span>Standard</span>
+      </div>
+      <div class="m-row">
+        <div class="c" style="width:70px"></div><div class="c" style="width:90px"></div>
+        <div class="c" style="width:110px"></div><div class="c" style="width:60px"></div>
+        <div class="c" style="width:110px"></div><div class="c" style="width:24px"></div>
+        <span class="m-badge amber"><span class="d"></span>SMA-0/1</span>
+      </div>
+      <div class="m-row">
+        <div class="c" style="width:70px"></div><div class="c" style="width:90px"></div>
+        <div class="c" style="width:110px"></div><div class="c" style="width:60px"></div>
+        <div class="c" style="width:110px"></div><div class="c" style="width:24px"></div>
+        <span class="m-badge red"><span class="d"></span>SMA-2</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="pill">DESIGN NOTE</span>
+      Rank number stays neutral in the table — the Status badge (color + text label, never color-only) is the single
+      source of RAG signal. Avoids double-coding the same status twice, and keeps the badge legible for colorblind
+      reviewers and printed audit reports.
+    </div>
+   </div>
+
+    <div class="m-drawer">
+      <div class="cap">Drill-Down Drawer</div>
+      <div class="sub" style="margin-bottom:10px;">slides in on row click</div>
+      <div class="big">4</div>
+      <div class="sub">MSME Risk Rank &middot; PD 0.18</div>
+      <div class="chart"></div>
+      <div class="cap" style="margin-bottom:6px;">Reason Codes (SHAP)</div>
+      <div class="rline"><div class="rd"></div><div class="rt"></div></div>
+      <div class="rline"><div class="rd"></div><div class="rt"></div></div>
+      <div class="rline"><div class="rd"></div><div class="rt"></div></div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-bottom:34px;">
+    <span class="pill">WHY A DRAWER</span>
+    Clicking any row opens the 24-month trajectory chart + plain-English SHAP reason codes in-place, so the officer
+    never loses the portfolio table context while reviewing one account.
+  </div>
+
+  <div class="screen-label">
+    <span class="screen-num">SCREEN 2 / 2</span>
+    <span class="screen-title">Model Governance</span>
+    <span class="screen-sub">&mdash; separate tab, for model-risk / audit review, not the daily officer screen</span>
+  </div>
+
+  <div class="frame">
+   <div class="m-main">
+    <div class="m-tabs">
+      <div class="m-tab">Portfolio View</div>
+      <div class="m-tab active">Model Governance</div>
+    </div>
+
+    <div class="gov-primary">
+      <div class="num">81.4%</div>
+      <div>
+        <div class="lbl2">Primary Metric</div>
+        <div class="desc">Balanced Accuracy &mdash; correctly accounts for class imbalance in default data</div>
+      </div>
+    </div>
+    <div class="gov-grid">
+      <div class="gov-card"><div class="v">0.885</div><div class="l">AUC-ROC</div></div>
+      <div class="gov-card"><div class="v">0.629</div><div class="l">KS-Statistic</div></div>
+      <div class="gov-card"><div class="v">0.770</div><div class="l">Gini Coefficient</div></div>
+      <div class="gov-card"><div class="v">0.895</div><div class="l">Recall @ 0.30</div></div>
+    </div>
+    <div class="callout">
+      <span class="pill">DESIGN NOTE</span>
+      Model-internal metrics (AUC/KS/Gini) never appear on the Portfolio tab &mdash; a loan officer needs to see which
+      accounts are at risk, not validate the model. This split was a deliberate product fix, not an afterthought.
+    </div>
+   </div>
+  </div>
+
+</div>
+</body></html>
