@@ -104,7 +104,15 @@ body {
   color: var(--text-low);
   text-transform: uppercase;
 }
-.dev-credit-logo { height: 15px; width: auto; }
+.dev-credit-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 9px;
+  line-height: 0;
+}
+.dev-credit-logo { height: 14px; width: auto; display: block; }
 .search-wrap {
   position: relative;
   display: flex;

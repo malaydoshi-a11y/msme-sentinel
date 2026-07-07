@@ -1,7 +1,7 @@
 <p align="center">
   <img src="dashboard/assets/idbi-bank-logo.svg" alt="IDBI Bank" height="56" />
   &nbsp;&nbsp;&nbsp;
-  <img src="dashboard/assets/guardinger-logo.svg" alt="Guardinger Advanced Technologies" height="48" />
+  <img src="dashboard/assets/guardinger-logo.png" alt="Guardinger Advanced Technologies" height="48" />
 </p>
 
 # MSME Sentinel
