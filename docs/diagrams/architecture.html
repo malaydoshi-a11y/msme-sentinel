@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+  body { margin:0; background:#081E1B; font-family: 'IBM Plex Sans', Arial, sans-serif; }
+  .canvas { width:1400px; padding:50px 60px; box-sizing:border-box; }
+  .title { color:#EDF4F1; font-size:22px; font-weight:600; margin-bottom:4px; letter-spacing:0.3px;}
+  .subtitle { color:#6E8983; font-size:13px; margin-bottom:34px; }
+  .row { display:flex; gap:18px; margin-bottom:18px; }
+  .box {
+    flex:1; background:#11322C; border:1px solid rgba(237,244,241,0.10); border-radius:10px;
+    padding:16px 18px; color:#EDF4F1;
+  }
+  .box .label { font-size:10.5px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; margin-bottom:8px;}
+  .box .content { font-size:13.5px; line-height:1.55; color:#C7D9D4; }
+  .box .content em { font-style:normal; color:#E8672C; font-size:11.5px; font-weight:600; }
+  .box.accent { border-left:3px solid #E8672C; }
+  .box.green { border-left:3px solid #34B378; }
+  .arrow-row { display:flex; justify-content:center; margin: 2px 0 10px; }
+  .arrow { color:#E8672C; font-size:20px; }
+  .feedback {
+    margin-top:22px; padding:14px 18px; border:1px dashed rgba(232,103,44,0.5); border-radius:10px;
+    color:#E8A99A; font-size:12.5px; display:flex; align-items:center; gap:10px;
+  }
+  .pill { display:inline-block; background:rgba(232,103,44,0.15); color:#E8672C; padding:3px 10px; border-radius:20px; font-size:10.5px; font-weight:600; letter-spacing:0.5px;}
+</style></head>
+<body>
+<div class="canvas">
+  <div class="title">MSME Sentinel — System Architecture</div>
+  <div class="subtitle">Track 04 · MSME Credit Default Prediction — IDBI Innovate 2026</div>
+
+  <div class="row">
+    <div class="box">
+      <div class="label">01 · Data Sources</div>
+      <div class="content">Core banking transactions &amp; bureau data <em>[Phase 1]</em> &middot; GST returns GSTR-1/3B <em>[Phase 1]</em> &middot; NACH/cheque bounce data <em>[Phase 1]</em> &middot; UPI cash-flow patterns <em>[Phase 2]</em> &middot; EPFO &amp; utility payments <em>[Phase 3, opportunistic]</em></div>
+      <div class="content" style="margin-top:6px; color:#6E8983; font-size:11.5px;">Phased by real data-infrastructure maturity, not all sourced equally on day one &mdash; see docs/data_feasibility_tiering.md</div>
+    </div>
+  </div>
+  <div class="arrow-row"><span class="arrow">&#9660;</span></div>
+
+  <div class="row">
+    <div class="box accent">
+      <div class="label">02 · Feature Engineering</div>
+      <div class="content"><strong>Snapshot features</strong> (current-month values) + <strong>Trend features</strong>: 3-month &amp; 6-month rolling slope and volatility per signal — this is what makes early detection possible, not just classification.</div>
+    </div>
+  </div>
+  <div class="arrow-row"><span class="arrow">&#9660;</span></div>
+
+  <div class="row">
+    <div class="box">
+      <div class="label">03 · Segment-Aware Ensemble Model</div>
+      <div class="content">XGBoost, class-imbalance corrected (scale_pos_weight). Segment-conditioned on loan type &times; vintage &times; borrower category (incl. New-to-Credit handling via alt-data fallback features).</div>
+    </div>
+    <div class="box green">
+      <div class="label">04 · Rank Calibration</div>
+      <div class="content">Predicted PD &rarr; <strong>CMR-style 1&ndash;10 MSME Risk Rank</strong> (fixed decile cutpoints) &mdash; matches the real CIBIL MSME Rank convention, not an invented scale. RAG maps directly onto RBI's SMA-0/SMA-1/SMA-2 categories.</div>
+    </div>
+  </div>
+  <div class="arrow-row"><span class="arrow">&#9660;</span></div>
+
+  <div class="row">
+    <div class="box accent">
+      <div class="label">05 · Early-Warning Trajectory Engine</div>
+      <div class="content">Rolling monthly re-score per account. Flags deteriorating slope (not just a point-in-time label) &rarr; RAG bucket (Red / Amber / Green) with a 12-month monitoring window.</div>
+    </div>
+  </div>
+  <div class="arrow-row"><span class="arrow">&#9660;</span></div>
+
+  <div class="row">
+    <div class="box">
+      <div class="label">06 · Explainability Layer</div>
+      <div class="content">SHAP TreeExplainer &rarr; top risk / protective drivers &rarr; templated plain-English reason codes for the underwriter.</div>
+    </div>
+    <div class="box">
+      <div class="label">07 · Loan Officer RAG Dashboard</div>
+      <div class="content">Portfolio overview + account drill-down: score, trend chart, reason codes, segment metadata.</div>
+    </div>
+  </div>
+  <div class="arrow-row"><span class="arrow">&#9660;</span></div>
+
+  <div class="row">
+    <div class="box green">
+      <div class="label">08 · Human-in-the-Loop Decision</div>
+      <div class="content">Underwriter reviews score + reasons and takes the credit call. <strong>AI advises, does not decide</strong> — matching IDBI's explicit requirement.</div>
+    </div>
+  </div>
+
+  <div class="feedback">
+    <span class="pill">FEEDBACK LOOP</span>
+    Actual outcomes (recovered / restructured / defaulted) flow back into periodic model retraining to keep the score calibrated as the portfolio evolves.
+  </div>
+</div>
+</body></html>

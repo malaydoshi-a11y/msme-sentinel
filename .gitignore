@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.DS_Store
+data/full_dataset.csv
+data/monthly_signals.csv
+data/feature_matrix.parquet
+data/scored_full.parquet
+data/borrower_master.csv
+*.log
+.ipynb_checkpoints/
+
+# Internal handoff notes - not for public repo
+HANDOFF_CONTEXT.md
+
+# Duplicate nested extraction from zip
+/msme-sentinel/
+
+# Unused loose scratch exports (not referenced by README/docs)
+/architecture_diagram.png
+/dashboard_screenshot_main.png
+/dashboard_screenshot_drawer.png
+/dashboard_screenshot_governance.png
+/process_flow_diagram.png

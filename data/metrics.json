@@ -1,0 +1,13 @@
+{
+  "balanced_accuracy": 0.8142,
+  "balanced_accuracy_threshold": 0.41,
+  "naive_accuracy_for_contrast_only": 0.7795,
+  "auc_roc": 0.8852,
+  "ks_statistic": 0.6293,
+  "gini_coefficient": 0.7704,
+  "pr_auc": 0.263,
+  "recall_at_0.30_threshold": 0.8945,
+  "n_train_rows": 108000,
+  "n_test_rows": 36000,
+  "positive_rate_test": 0.0463
+}

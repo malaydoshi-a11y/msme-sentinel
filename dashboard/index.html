@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MSME Sentinel — Early Warning System | IDBI Innovate 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="vendor/chart.umd.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">MS</div>
+      <div class="brand-text">
+        <div class="brand-name">MSME SENTINEL</div>
+        <div class="brand-tag">Early-Warning Credit Risk System &middot; Track 04 &middot; IDBI Innovate 2026</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="text" placeholder="Search borrower ID, loan type, segment..." />
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="portfolio">Portfolio View</button>
+    <button class="tab-btn" data-tab="governance">Model Governance</button>
+  </nav>
+
+  <div class="tab-panel" id="tabPortfolio">
+    <section class="summary-strip">
+      <div class="rag-tiles" id="ragTiles"></div>
+    </section>
+
+    <section class="spectrum-panel">
+      <div class="spectrum-header">
+        <span>PORTFOLIO RISK RANK SPECTRUM</span>
+        <span class="spectrum-sub">MSME Risk Rank 1&ndash;10 &middot; CIBIL-MSME-Rank-style convention, common across all loan types &amp; segments</span>
+      </div>
+      <div id="spectrumChartWrap"><canvas id="spectrumChart" height="70"></canvas></div>
+      <div class="spectrum-legend">
+        <span><i class="dot green"></i>Rank 1&ndash;3 Healthy (Standard)</span>
+        <span><i class="dot amber"></i>Rank 4&ndash;6 Watch (SMA-0/SMA-1)</span>
+        <span><i class="dot red"></i>Rank 7&ndash;10 High Risk (SMA-2)</span>
+      </div>
+    </section>
+
+    <section class="table-panel">
+      <div class="table-header-row">
+        <div class="table-title">MONITORED ACCOUNTS <span id="accountCount"></span></div>
+        <div class="table-sort">
+          <button class="sort-btn active" data-sort="risk">Sort: Highest risk first</button>
+          <button class="sort-btn" data-sort="rank">Sort: Rank</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="accountsTable">
+          <thead>
+            <tr>
+              <th>Borrower</th>
+              <th>Loan Type</th>
+              <th>Business Segment</th>
+              <th>Vintage</th>
+              <th>Category</th>
+              <th>Loan Amt (₹L)</th>
+              <th>MSME Rank</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="accountsTbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="tab-panel hidden" id="tabGovernance">
+    <section class="gov-panel">
+      <div class="gov-header">
+        <div>
+          <div class="gov-title">Model Performance &amp; Validation</div>
+          <div class="gov-sub">For model risk, audit, and technical review &middot; not part of daily loan-officer workflow</div>
+        </div>
+      </div>
+
+      <div class="gov-primary">
+        <div class="gov-primary-label">PRIMARY METRIC (per problem statement ask)</div>
+        <div class="gov-primary-row">
+          <div class="gov-primary-value" id="govBalancedAcc">--</div>
+          <div class="gov-primary-desc">
+            Balanced Accuracy<br/>
+            <span class="gov-note">Correctly accounts for class imbalance in default data — see note below</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gov-supporting-label">SUPPORTING RIGOR METRICS</div>
+      <div class="gov-metrics-grid" id="govMetricsGrid"></div>
+
+      <div class="gov-callout">
+        <strong>Why balanced accuracy, not raw accuracy:</strong> on this imbalanced default dataset, a model
+        that predicts "no default" for every account can score 90%+ raw accuracy while being useless.
+        Balanced accuracy (average of sensitivity and specificity) is still honestly "accuracy" — just measured
+        correctly. AUC-ROC, KS-statistic, and Gini coefficient are the industry-standard credit-risk metrics that
+        confirm this number reflects real discriminative power, not an artifact of class imbalance.
+        Full reasoning: <code>docs/metrics_note.md</code>.
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <button class="drawer-close" id="drawerClose" aria-label="Close">&times;</button>
+  <div id="drawerContent"></div>
+</aside>
+
+<script src="app.js"></script>
+</body>
+</html>

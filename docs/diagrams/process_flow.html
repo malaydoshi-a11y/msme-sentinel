@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+  body { margin:0; background:#081E1B; font-family: 'IBM Plex Sans', Arial, sans-serif; }
+  .canvas { width:1400px; padding:50px 60px; box-sizing:border-box; }
+  .title { color:#EDF4F1; font-size:22px; font-weight:600; margin-bottom:4px; }
+  .subtitle { color:#6E8983; font-size:13px; margin-bottom:36px; }
+  .flow { display:flex; align-items:stretch; gap:0; }
+  .step {
+    flex:1; background:#11322C; border:1px solid rgba(237,244,241,0.10); border-radius:10px;
+    padding:18px 16px; color:#EDF4F1; position:relative;
+  }
+  .step .num { font-family:'IBM Plex Mono', monospace; color:#E8672C; font-size:12px; margin-bottom:8px; }
+  .step .step-title { font-size:14px; font-weight:600; margin-bottom:8px; }
+  .step .step-body { font-size:12px; color:#A9C2BB; line-height:1.5; }
+  .connector { width:34px; display:flex; align-items:center; justify-content:center; color:#E8672C; font-size:20px; flex-shrink:0; }
+  .branch-row { display:flex; gap:0; margin-top:24px; }
+  .branch-label { color:#6E8983; font-size:11px; letter-spacing:1px; text-transform:uppercase; margin: 30px 0 12px; }
+  .rag-strip { display:flex; gap:10px; margin-top:6px; }
+  .rag-chip { font-size:11px; padding:4px 10px; border-radius:20px; font-weight:600; }
+  .rag-chip.green { background:rgba(52,179,120,0.15); color:#34B378; }
+  .rag-chip.amber { background:rgba(232,163,61,0.15); color:#E8A33D; }
+  .rag-chip.red { background:rgba(225,80,63,0.15); color:#E1503F; }
+</style></head>
+<body>
+<div class="canvas">
+  <div class="title">MSME Sentinel — Process Flow (Loan Officer Journey)</div>
+  <div class="subtitle">From monthly data refresh to underwriter action — how the Early-Warning System is used in practice</div>
+
+  <div class="flow">
+    <div class="step">
+      <div class="num">01</div>
+      <div class="step-title">Monthly Data Refresh</div>
+      <div class="step-body">Transactions, GST filings, UPI cash-flow, utility &amp; EPFO records pulled for every active MSME loan account.</div>
+    </div>
+    <div class="connector">&#8594;</div>
+    <div class="step">
+      <div class="num">02</div>
+      <div class="step-title">Rank &amp; Trend Update</div>
+      <div class="step-body">Model recomputes each account's CMR-style MSME Risk Rank (1&ndash;10) and updates its 24-month trajectory.</div>
+    </div>
+    <div class="connector">&#8594;</div>
+    <div class="step">
+      <div class="num">03</div>
+      <div class="step-title">RAG Classification</div>
+      <div class="step-body">Account bucketed into Green / Amber / Red &mdash; mapped onto RBI's SMA-0/SMA-1/SMA-2 &mdash; based on rank + deterioration slope.
+        <div class="rag-strip">
+          <span class="rag-chip green">GREEN</span><span class="rag-chip amber">AMBER</span><span class="rag-chip red">RED</span>
+        </div>
+      </div>
+    </div>
+    <div class="connector">&#8594;</div>
+    <div class="step">
+      <div class="num">04</div>
+      <div class="step-title">Officer Review (Amber/Red)</div>
+      <div class="step-body">Loan officer opens account drill-down: rank, trend chart, plain-English reason codes.</div>
+    </div>
+    <div class="connector">&#8594;</div>
+    <div class="step">
+      <div class="num">05</div>
+      <div class="step-title">Human Decision &amp; Action</div>
+      <div class="step-body">Officer decides: advisory outreach, restructuring, security review, or monitor. AI informs — never auto-decides.</div>
+    </div>
+  </div>
+
+  <div class="branch-label">Feedback loop</div>
+  <div class="flow">
+    <div class="step" style="flex:2;">
+      <div class="num">06</div>
+      <div class="step-title">Outcome Logged &amp; Model Retrained</div>
+      <div class="step-body">Actual account outcome (resolved / restructured / defaulted) recorded and used to periodically retrain and recalibrate the scoring model, keeping accuracy current as the portfolio evolves.</div>
+    </div>
+  </div>
+</div>
+</body></html>
