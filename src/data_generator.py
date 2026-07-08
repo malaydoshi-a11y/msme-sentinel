@@ -29,28 +29,28 @@ docs/domain_research.md for the full sourcing. In brief:
     1-10 rank, matching the real bureau convention for this exact exposure
     band and horizon, not the 300-900 scale used for personal credit.
 
-Segments simulated (per IDBI's problem statement + AMA):
+Segments simulated (per IDBI's problem statement):
   - Loan type: Term Loan, Working Capital / Cash Credit, Trade Finance
   - Borrower category: Existing-to-Bank (ETB) vs New-to-Credit (NTC)
   - Vintage: <1yr, 1-3yr, 3-7yr, 7yr+
   - Business type: Manufacturing, Trading, Services, Logistics
 
 Calibration note: the eventual default rate this generator produces (~8-9%) is
-deliberately anchored to RBI/Finance Ministry published MSME-sector Gross NPA
-figures, not chosen to hit a convenient target metric. RBI has reported the
-MSME-sector GNPA ratio at 9.87% (March 2021) declining to 3.27% (September
-2025), and separately 11% (FY2020) to 4% (FY2024) [PIB/RBI releases, 2025].
-We calibrate toward the higher, stressed-cycle end of that real range
-deliberately: an early-warning system is most useful to demonstrate, and
-most useful to a bank, under stressed portfolio conditions -- not in an
-unusually clean low-NPA environment. Disclosed here rather than left for a
-reviewer to have to ask about. See docs/data_calibration_note.md for sources.
+anchored to RBI/Finance Ministry published MSME-sector Gross NPA figures
+(9.87% in March 2021, declining to 3.27% in September 2025; separately 11%
+in FY2020 to 4% in FY2024 -- PIB/RBI releases, 2025), calibrated toward the
+higher, stressed-cycle end of that range since an early-warning system is
+most useful to demonstrate under stressed portfolio conditions. See
+docs/data_calibration_note.md for sources.
 """
 
 import numpy as np
 import pandas as pd
 from dataclasses import dataclass
 import json
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 RNG_SEED = 42
 N_BORROWERS = 6000
@@ -229,9 +229,10 @@ def build_full_dataset():
 
 if __name__ == "__main__":
     master, ts, full = build_full_dataset()
-    master.to_csv("/home/claude/msme-sentinel/data/borrower_master.csv", index=False)
-    ts.to_csv("/home/claude/msme-sentinel/data/monthly_signals.csv", index=False)
-    full.to_csv("/home/claude/msme-sentinel/data/full_dataset.csv", index=False)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    master.to_csv(DATA_DIR / "borrower_master.csv", index=False)
+    ts.to_csv(DATA_DIR / "monthly_signals.csv", index=False)
+    full.to_csv(DATA_DIR / "full_dataset.csv", index=False)
 
     default_rate = full.groupby("borrower_id")["default_month"].first().notna().mean()
     print(f"Borrowers: {len(master)}")

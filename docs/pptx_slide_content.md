@@ -31,7 +31,7 @@ Most default-prediction approaches — and likely most other submissions — bui
 4. Every score ships with **SHAP-based, human-readable reasoning grounded in real underwriting signals** — GSTR-1 vs GSTR-3B turnover consistency (the actual primary GST fraud/risk signal used by NBFCs today), not a generic "GST filing delay."
 
 **How will it solve the problem?**
-It directly targets both gaps IDBI named: accuracy (16–22% today → we demonstrate AUC-ROC 0.885 / KS-statistic 0.629, correctly measured for imbalanced default data) and lead time (IDBI's own internal model reportedly predicts only ~3 months ahead; our trend-based design targets the full 12-month window). It also solves New-to-Credit thin-file scoring through alternative-data fallback features, and gives underwriters an explainable, actionable interface instead of a raw score they have to trust blindly.
+It directly targets both gaps IDBI named: accuracy (16–22% today → we demonstrate AUC-ROC 0.900 / KS-statistic 0.656, correctly measured for imbalanced default data) and lead time (IDBI's own internal model reportedly predicts only ~3 months ahead; our trend-based design targets the full 12-month window). It also solves New-to-Credit thin-file scoring through alternative-data fallback features, and gives underwriters an explainable, actionable interface instead of a raw score they have to trust blindly.
 
 **USP:** *Early warning, not a coin flip.* A trajectory-based system that tells a loan officer not just "is this account risky" but "is it getting worse, why, and how much runway is left" — which is the actual decision a bank needs to make.
 
@@ -111,7 +111,7 @@ Phased, matching the rollout tiers above rather than one lump estimate:
 
 | Metric | Value |
 |---|---|
-| **Balanced Accuracy** | **81.4%** |
+| **Balanced Accuracy** | **82.75%** |
 
 *Balanced accuracy — the average of sensitivity and specificity — correctly accounts for class imbalance in default data, unlike raw accuracy. It is still honestly "accuracy," just measured the way a credit-risk team actually measures it.*
 
@@ -119,12 +119,12 @@ Phased, matching the rollout tiers above rather than one lump estimate:
 
 | Metric | Value | Note |
 |---|---|---|
-| AUC-ROC | 0.885 | Standard discrimination metric for imbalanced credit risk problems |
-| KS-Statistic | 0.629 | >0.4 is considered strong in credit scoring — this is very strong |
-| Gini Coefficient | 0.770 | Industry-standard scorecard quality metric (2×AUC−1) |
-| Recall @ Early-Warning Threshold (0.30) | 0.895 | A separate, more sensitive operating point used specifically for early-warning sensitivity — deliberately different from the balanced-accuracy threshold, since missing a future defaulter is costlier than a false alarm |
+| AUC-ROC | 0.900 | Standard discrimination metric for imbalanced credit risk problems |
+| KS-Statistic | 0.656 | >0.4 is considered strong in credit scoring — this is very strong |
+| Gini Coefficient | 0.800 | Industry-standard scorecard quality metric (2×AUC−1) |
+| Recall @ Early-Warning Threshold (0.30) | 0.927 | A separate, more sensitive operating point used specifically for early-warning sensitivity — deliberately different from the balanced-accuracy threshold, since missing a future defaulter is costlier than a false alarm |
 
-*Note (include this — it shows rigor, not evasion):* Raw accuracy on this imbalanced dataset is a well-known misleading metric — a model that always predicts "no default" can exceed 90% raw accuracy while being useless. This exact concern was raised in IDBI's own AMA for this track. We report balanced accuracy instead, which answers their literal ask correctly rather than avoiding it. Full reasoning in `docs/metrics_note.md`.
+*Note:* Raw accuracy on this imbalanced dataset is a well-known misleading metric — a model that always predicts "no default" can exceed 90% raw accuracy while being useless. We report balanced accuracy instead, which answers the literal accuracy ask correctly rather than avoiding it. Full reasoning in `docs/metrics_note.md`.
 
 **Product note:** in the actual dashboard, these performance metrics live in a separate "Model Governance" view, deliberately kept out of the daily loan-officer screen — a loan officer needs to see which accounts are at risk, not AUC-ROC. Model performance is for the technical/audit reviewer, not the end user, and the product is built to reflect that separation.
 

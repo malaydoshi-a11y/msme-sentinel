@@ -17,7 +17,7 @@ IDBI Bank's current MSME default-prediction capability sits at **16–22% accura
 
 ## Why we didn't just build "another classifier"
 
-Every team in this track will submit a gradient-boosted binary classifier trained to predict default. That's necessary, but on its own it overclaims what a single-shot, point-in-time model can honestly deliver a full year out — MSME cash flows are volatile, and a naive high-accuracy claim on an imbalanced dataset is a well-known statistical trap (a model that always predicts "no default" can look >90% "accurate" while being useless — a risk explicitly raised, and acknowledged, in IDBI's own AMA session for this track).
+A single-shot, point-in-time classifier overclaims what a model can honestly deliver a full year out — MSME cash flows are volatile, and a naive high-accuracy claim on an imbalanced dataset is a well-known statistical trap (a model that always predicts "no default" can look >90% "accurate" while being useless).
 
 **MSME Sentinel reframes the deliverable**: instead of a single binary prophecy, it is a continuously-updating **Early Warning System** that tracks each borrower's financial-health trajectory month over month, and flags *deteriorating trends* early enough for a loan officer to act — which is what "12 months in advance" is actually useful for.
 
@@ -29,7 +29,7 @@ Every team in this track will submit a gradient-boosted binary classifier traine
 4. **Calibrates** the raw probability into one common, comparable **CMR-style MSME Risk Rank (1–10)** — deliberately matching the real **CIBIL MSME Rank (CMR)** convention already used across Indian MSME lending for this exact exposure band and 12-month horizon, not the 300–900 scale used for personal/individual credit. A single scale across every loan type and borrower segment, resolving IDBI's "unified vs. segmented" ask with a concrete hybrid answer.
 5. **Maps RAG status onto RBI's real SMA-0/SMA-1/SMA-2 early-warning classification** — not an invented 3-tier scheme. Green = Standard asset, Amber = SMA-0/SMA-1 territory, Red = SMA-2 (one step from NPA).
 6. **Explains** every score with SHAP-derived, plain-English reason codes grounded in real underwriting signals (GSTR-1 vs GSTR-3B turnover consistency, GST filing compliance, EPFO regularity, cheque/NACH bounce rate) — risk drivers for stressed accounts, protective factors for healthy ones.
-7. **Presents** it all in a RAG (Red/Amber/Green) loan-officer dashboard with per-account trajectory charts — a decision-support tool. **The AI advises; the underwriter decides** — human-in-the-loop by design, exactly as IDBI's DGMs stated on record ("we are not going to remove human intervention").
+7. **Presents** it all in a RAG (Red/Amber/Green) loan-officer dashboard with per-account trajectory charts — a decision-support tool. **The AI advises; the underwriter decides** — human-in-the-loop by design, not an autonomous approval/rejection engine.
 
 See [`docs/domain_research.md`](docs/domain_research.md) for the full sourcing behind every feature and design choice above.
 
@@ -39,18 +39,18 @@ See [`docs/domain_research.md`](docs/domain_research.md) for the full sourcing b
 
 | Metric | Value |
 |---|---|
-| **Balanced Accuracy** | **81.4%** (at optimal threshold 0.41) |
+| **Balanced Accuracy** | **82.75%** (at optimal threshold 0.46) |
 
 **Supporting rigor metrics — why this number can be trusted:**
 
 | Metric | Value | Why this metric matters |
 |---|---|---|
-| AUC-ROC | **0.885** | Standard discrimination metric for imbalanced credit risk problems |
-| KS-Statistic | **0.629** | Classic credit-scoring separation metric; >0.4 is considered strong, this is very strong |
-| Gini Coefficient | **0.770** | Industry-standard scorecard quality metric (2×AUC−1) |
-| Recall @ Early-Warning Threshold (0.30) | **0.895** | A deliberately different, more sensitive threshold for the early-warning use case, where missing a defaulter is costlier than a false alarm |
+| AUC-ROC | **0.900** | Standard discrimination metric for imbalanced credit risk problems |
+| KS-Statistic | **0.656** | Classic credit-scoring separation metric; >0.4 is considered strong, this is very strong |
+| Gini Coefficient | **0.800** | Industry-standard scorecard quality metric (2×AUC−1) |
+| Recall @ Early-Warning Threshold (0.30) | **0.927** | A deliberately different, more sensitive threshold for the early-warning use case, where missing a defaulter is costlier than a false alarm |
 
-We report **balanced accuracy** as primary because IDBI's problem statement literally asks for "accuracy" — we answer that directly, just measured correctly for imbalanced data instead of using the naive version that a participant in IDBI's own AMA correctly flagged as misleading. See [`docs/metrics_note.md`](docs/metrics_note.md) for the full reasoning.
+We report **balanced accuracy** as primary because IDBI's problem statement literally asks for "accuracy" — we answer that directly, just measured correctly for imbalanced data rather than using a naive figure that would be misleading here. See [`docs/metrics_note.md`](docs/metrics_note.md) for the full reasoning.
 
 In the dashboard itself, these metrics live in a separate **Model Governance** view, deliberately kept apart from the Portfolio view a loan officer uses daily — model validation is a technical/audit concern, not something that belongs cluttering the operational screen.
 
@@ -124,9 +124,7 @@ It asserts `dashboard/data.json` exists, parses as valid JSON, and contains a no
 
 ## Feasibility: what's adoptable now vs. later
 
-Not every alternative-data signal in this model is equally ready to plug into a
-live bank system tomorrow, and we think saying so explicitly is what makes this
-credible rather than what undermines it.
+Not every alternative-data signal in this model is equally ready to plug into a live bank system tomorrow.
 
 - **Phase 1 (available today, no new infrastructure):** Bureau/CIBIL MSME
   Rank, bank transactions (via Account Aggregator), GST returns (via GSP/AA),
@@ -137,18 +135,18 @@ credible rather than what undermines it.
 - **Phase 2 (real, but consent/coverage still maturing):** UPI transaction
   behavior, added as borrowers complete Account Aggregator consent.
 - **Phase 3 (genuinely useful, not a blocker):** EPFO contribution regularity
-  and utility payment history — both directionally right (and both raised by
-  IDBI's own team in the AMA), but the weakest infrastructure today. EPFO in
-  particular is **structurally absent**, not just thin, for the large share of
-  MSMEs with no registered employees — our synthetic data models this honestly
-  (~55% of simulated borrowers have no EPFO exposure at all, handled via a
-  dedicated missing-data flag rather than a fabricated number).
+  and utility payment history — directionally valuable, but the weakest
+  infrastructure today. EPFO in particular is **structurally absent**, not
+  just thin, for the large share of MSMEs with no registered employees — our
+  synthetic data models this honestly (~55% of simulated borrowers have no
+  EPFO exposure at all, handled via a dedicated missing-data flag rather than
+  a fabricated number).
 
 Full reasoning and sourcing: [`docs/data_feasibility_tiering.md`](docs/data_feasibility_tiering.md).
 
-## Roadmap (post-shortlisting)
+## Roadmap
 
 - Swap synthetic data for IDBI's real sandbox datasets/APIs — architecture requires no changes.
 - Add account-level restructuring recommendations (not just flags).
-- Extend segment-aware calibration with more granular industry/cluster benchmarks (as raised for the MSME rapid-growth identification use case in Track 3/4 discussions).
+- Extend segment-aware calibration with more granular industry/cluster benchmarks.
 - Add a model monitoring layer (population stability index / drift detection) for production readiness.

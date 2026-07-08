@@ -8,14 +8,25 @@ consumed by the static dashboard (no backend required).
 """
 
 import json
+import re
 import numpy as np
 import pandas as pd
 import xgboost as xgb
 import shap
+from pathlib import Path
 
 from features import build_feature_matrix
 
-DATA_DIR = "/home/claude/msme-sentinel/data"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DATA_DIR = REPO_ROOT / "data"
+DASHBOARD_DIR = REPO_ROOT / "dashboard"
+
+TREND_SUFFIX_PATTERN = re.compile(r"_(slope|vol|avg|min|max|accel)_\d+m$")
+
+
+def base_signal_name(feature_name):
+    return TREND_SUFFIX_PATTERN.sub("", feature_name)
+
 
 N_PER_BUCKET = {"RED": 16, "AMBER": 14, "GREEN": 12}  # latest-month status
 
@@ -32,17 +43,17 @@ def select_representative_borrowers(scored_full):
 
 
 def main():
-    scored_full = pd.read_parquet(f"{DATA_DIR}/scored_full.parquet")
-    full_raw = pd.read_csv(f"{DATA_DIR}/full_dataset.csv")
-    with open(f"{DATA_DIR}/metrics.json") as f:
+    scored_full = pd.read_parquet(DATA_DIR / "scored_full.parquet")
+    full_raw = pd.read_csv(DATA_DIR / "full_dataset.csv")
+    with open(DATA_DIR / "metrics.json") as f:
         metrics = json.load(f)
-    with open(f"{DATA_DIR}/rag_distribution.json") as f:
+    with open(DATA_DIR / "rag_distribution.json") as f:
         rag_dist = json.load(f)
 
     borrower_ids = select_representative_borrowers(scored_full)
 
     model = xgb.XGBClassifier()
-    model.load_model(f"{DATA_DIR}/xgb_model.json")
+    model.load_model(DATA_DIR / "xgb_model.json")
 
     df_feat, feature_cols = build_feature_matrix(full_raw)
     df_feat = df_feat.dropna(subset=[c for c in feature_cols if "_6m" in c], how="all").fillna(0)
@@ -65,6 +76,8 @@ def main():
         "overdraft_utilization_pct": "High overdraft utilization",
         "bounce_rate_pct": "Rising cheque/NACH bounce rate",
         "bureau_score": "Weak bureau/credit history",
+        "gst_stress_compound": "Compounding GST inconsistency and non-compliance",
+        "liquidity_stress_compound": "Compounding overdraft and bounce-rate stress",
     }
     protective_labels = {
         "gst_turnover_consistency_ratio": "Consistent GSTR-1 / GSTR-3B turnover",
@@ -76,6 +89,8 @@ def main():
         "overdraft_utilization_pct": "Low overdraft utilization",
         "bounce_rate_pct": "Negligible cheque/NACH bounces",
         "bureau_score": "Strong bureau/credit history",
+        "gst_stress_compound": "No compounding GST risk",
+        "liquidity_stress_compound": "No compounding liquidity stress",
     }
 
     def top_reasons(row_shap, rag_status, epfo_missing_flag, k=3):
@@ -84,13 +99,13 @@ def main():
         labels_map = risk_labels if want_positive else protective_labels
         reasons = []
         for name, val in pairs:
-            if epfo_missing_flag and name.startswith("epfo_contribution_regularity_pct"):
+            base = base_signal_name(name)
+            if epfo_missing_flag and base.startswith("epfo_contribution_regularity_pct"):
                 continue
             if want_positive and val <= 0:
                 continue
             if (not want_positive) and val >= 0:
                 continue
-            base = name.split("_slope_")[0].split("_vol_")[0].split("_avg_")[0]
             label = labels_map.get(base)
             if label and label not in reasons:
                 reasons.append(label)
@@ -154,7 +169,7 @@ def main():
         "accounts": accounts,
     }
 
-    with open("/home/claude/msme-sentinel/dashboard/data.json", "w") as f:
+    with open(DASHBOARD_DIR / "data.json", "w") as f:
         json.dump(bundle, f, indent=2)
 
     print(f"Exported {len(accounts)} accounts to dashboard/data.json")

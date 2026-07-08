@@ -22,7 +22,7 @@ Record screen + voiceover. Suggested pacing below (timestamps are targets, not r
 
 *(Click the "Model Governance" tab)*
 
-> "Performance metrics live in their own tab, on purpose. Balanced accuracy: 81.4%, correctly measured for imbalanced data — the metric IDBI actually asked for, done right. AUC-ROC 0.885, KS-statistic 0.63 back it up as real discriminative power."
+> "Performance metrics live in their own tab, on purpose. Balanced accuracy: 82.75%, correctly measured for imbalanced data — the metric IDBI actually asked for, done right. AUC-ROC 0.90, KS-statistic 0.66 back it up as real discriminative power."
 
 ---
 
@@ -38,7 +38,7 @@ Record screen + voiceover. Suggested pacing below (timestamps are targets, not r
 
 *(Point at the reason codes list)*
 
-> "IDBI's own team was clear in their AMA: AI should never replace the underwriter, it should give reasons. Every rank ships with plain-English drivers — irregular EPFO contributions, a widening GSTR-1 vs GSTR-3B gap, rising bounce rate. No black box. The underwriter sees why, and makes the final call."
+> "AI shouldn't replace the underwriter, it should give reasons. Every rank ships with plain-English drivers — irregular EPFO contributions, a widening GSTR-1 vs GSTR-3B gap, rising bounce rate. No black box. The underwriter sees why, and makes the final call."
 
 ---
 

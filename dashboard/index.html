@@ -112,12 +112,9 @@
       <div class="gov-metrics-grid" id="govMetricsGrid"></div>
 
       <div class="gov-callout">
-        <strong>Why balanced accuracy, not raw accuracy:</strong> on this imbalanced default dataset, a model
-        that predicts "no default" for every account can score 90%+ raw accuracy while being useless.
-        Balanced accuracy (average of sensitivity and specificity) is still honestly "accuracy" — just measured
-        correctly. AUC-ROC, KS-statistic, and Gini coefficient are the industry-standard credit-risk metrics that
-        confirm this number reflects real discriminative power, not an artifact of class imbalance.
-        Full reasoning: <code>docs/metrics_note.md</code>.
+        <strong>Why balanced accuracy:</strong> it correctly accounts for class imbalance in default data, unlike raw accuracy.
+        AUC-ROC, KS-statistic, and Gini confirm the same discriminative power independently.
+        Methodology: <code>docs/metrics_note.md</code>.
       </div>
     </section>
   </div>
