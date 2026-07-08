@@ -9,6 +9,9 @@ data/borrower_master.csv
 *.log
 .ipynb_checkpoints/
 
+# Claude Code local harness state
+.claude/
+
 # Internal handoff notes - not for public repo
 HANDOFF_CONTEXT.md
 
