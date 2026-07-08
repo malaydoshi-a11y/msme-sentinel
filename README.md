@@ -106,6 +106,16 @@ python -m http.server 8080    # serve the dashboard locally
 
 The dashboard is a static site (HTML/CSS/JS + a JSON data file, no backend) — deployable as-is to GitHub Pages, Netlify, or Vercel.
 
+### Pre-deploy smoke test
+
+Run this before every deploy to catch a broken/missing `data.json` before it reaches production:
+
+```bash
+python scripts/smoke_test.py
+```
+
+It asserts `dashboard/data.json` exists, parses as valid JSON, and contains a non-empty `accounts` array with the fields `app.js` depends on.
+
 ## Team
 
 - **Team name:** Guardinger Advanced Technologies

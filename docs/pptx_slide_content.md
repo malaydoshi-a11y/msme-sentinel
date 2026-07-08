@@ -63,7 +63,7 @@ It directly targets both gaps IDBI named: accuracy (16–22% today → we demons
 
 ## Slide: Wireframes/Mock diagrams of the proposed solution (optional)
 
-Skip or replace with a note: *"A working, interactive prototype was built directly rather than static wireframes — see Snapshots of the Prototype section."*
+*Insert image:* `docs/diagrams/wireframes.png` — annotated Portfolio View + Model Governance wireframe with the design rationale for each region (RAG tiles, rank spectrum, account table, drill-down drawer, governance split).
 
 ---
 
@@ -71,7 +71,7 @@ Skip or replace with a note: *"A working, interactive prototype was built direct
 
 *Insert image:* `docs/diagrams/architecture.png`
 
-(Shows the 8-layer pipeline: Data Sources → Feature Engineering → Segment-Aware Ensemble Model → Score Calibration → Early-Warning Trajectory Engine → Explainability Layer → Loan Officer RAG Dashboard → Human-in-the-Loop Decision, with a feedback loop back into retraining.)
+(Shows the 8-layer pipeline: Data Sources → Feature Engineering → Segment-Aware Ensemble Model → Rank Calibration → Early-Warning Trajectory Engine → Explainability Layer → Loan Officer RAG Dashboard → Human-in-the-Loop Decision, with a feedback loop back into retraining.)
 
 ---
 
@@ -101,7 +101,7 @@ Phased, matching the rollout tiers above rather than one lump estimate:
 
 ## Slide: Snapshots of the prototype
 
-*Insert screenshots:* dashboard main view (portfolio + RAG tiles + score spectrum + account table) and the account drill-down drawer (score, trajectory chart, reason codes).
+*Insert screenshots:* dashboard main view (portfolio + RAG tiles + rank spectrum + account table), the account drill-down drawer (rank, PD, trajectory chart, reason codes), and the Model Governance tab (balanced accuracy + supporting metrics).
 
 ---
 

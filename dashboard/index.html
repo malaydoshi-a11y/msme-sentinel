@@ -12,23 +12,22 @@
 </head>
 <body>
 
+<div id="statusOverlay" class="status-overlay">
+  <div class="status-spinner"></div>
+  <div class="status-text">Loading portfolio data&hellip;</div>
+</div>
+
 <div class="app">
 
   <header class="topbar">
     <div class="brand">
-      <img src="assets/idbi-bank-logo.svg" alt="IDBI Bank" class="institution-logo" />
-      <div class="brand-divider"></div>
-      <div class="brand-mark">MS</div>
+      <span class="brand-logo-chip"><img src="assets/guardinger-logo.png" alt="Guardinger Advanced Technologies" class="brand-logo" /></span>
       <div class="brand-text">
         <div class="brand-name">MSME SENTINEL</div>
-        <div class="brand-tag">Early-Warning Credit Risk System &middot; Track 04 &middot; IDBI Innovate 2026</div>
+        <div class="brand-tag"><img src="assets/idbi-bank-logo.svg" alt="IDBI Bank" class="idbi-context-icon" />Early-Warning Credit Risk System &middot; Track 04 &middot; IDBI Innovate 2026</div>
       </div>
     </div>
     <div class="topbar-right">
-      <div class="dev-credit">
-        <span class="dev-credit-label">Developed by</span>
-        <span class="dev-credit-chip"><img src="assets/guardinger-logo.png" alt="Guardinger Advanced Technologies" class="dev-credit-logo" /></span>
-      </div>
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <input id="searchInput" type="text" placeholder="Search borrower ID, loan type, segment..." />
@@ -45,6 +44,8 @@
     <section class="summary-strip">
       <div class="rag-tiles" id="ragTiles"></div>
     </section>
+
+    <div class="portfolio-accuracy-note" id="portfolioAccuracyNote"></div>
 
     <section class="spectrum-panel">
       <div class="spectrum-header">

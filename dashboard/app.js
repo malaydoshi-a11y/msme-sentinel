@@ -6,14 +6,54 @@ const RAG_COLOR = { RED: '#E1503F', AMBER: '#E8A33D', GREEN: '#34B378' };
 
 function fmtPct(x) { return (x * 100).toFixed(1) + '%'; }
 
+window.onerror = function (message, source, lineno, colno, error) {
+  console.error('Unhandled error:', message, 'at', (source || '') + ':' + lineno, error || '');
+};
+
 async function init() {
-  const res = await fetch('data.json');
-  DATA = await res.json();
-  renderRagTiles();
-  renderGovernance();
-  renderSpectrum();
-  renderTable();
-  wireEvents();
+  try {
+    const res = await fetch('data.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' fetching data.json');
+    DATA = await res.json();
+    renderRagTiles();
+    renderGovernance();
+    renderAccuracyCallout();
+    renderSpectrum();
+    renderTable();
+    wireEvents();
+    hideStatusOverlay();
+  } catch (err) {
+    console.error('Failed to load dashboard data:', err);
+    showErrorState();
+  }
+}
+
+function hideStatusOverlay() {
+  const el = document.getElementById('statusOverlay');
+  if (el) el.remove();
+}
+
+function showErrorState() {
+  const el = document.getElementById('statusOverlay');
+  if (!el) return;
+  el.classList.add('is-error');
+  el.innerHTML = `
+    <div class="status-icon">!</div>
+    <div class="status-text">Couldn't load portfolio data &mdash; please refresh.</div>
+  `;
+}
+
+function renderAccuracyCallout() {
+  const el = document.getElementById('portfolioAccuracyNote');
+  if (!el) return;
+  const pct = (DATA.portfolio.model_metrics.balanced_accuracy * 100).toFixed(1);
+  el.innerHTML = `Model validated &middot; <strong>${pct}% balanced accuracy</strong> &middot; <a data-goto-tab="governance">see Model Governance</a>`;
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.getElementById('tabPortfolio').classList.toggle('hidden', tabName !== 'portfolio');
+  document.getElementById('tabGovernance').classList.toggle('hidden', tabName !== 'governance');
 }
 
 function renderGovernance() {
@@ -135,13 +175,16 @@ function wireEvents() {
   document.getElementById('scrim').addEventListener('click', closeDrawer);
 
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tabPortfolio').classList.toggle('hidden', btn.dataset.tab !== 'portfolio');
-      document.getElementById('tabGovernance').classList.toggle('hidden', btn.dataset.tab !== 'governance');
-    });
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
   });
+
+  const accuracyLink = document.querySelector('#portfolioAccuracyNote [data-goto-tab]');
+  if (accuracyLink) {
+    accuracyLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab(accuracyLink.dataset.gotoTab);
+    });
+  }
 }
 
 let trajectoryChartInstance = null;
