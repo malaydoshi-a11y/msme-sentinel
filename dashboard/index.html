@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MSME Sentinel — Early Warning System | IDBI Innovate 2026</title>
+<title>MSME Sentinel - Early Warning System | IDBI Innovate 2026</title>
 <link rel="icon" type="image/svg+xml" href="assets/idbi-bank-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,9 +28,23 @@
       </div>
     </div>
     <div class="topbar-right">
-      <div class="search-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="searchInput" type="text" placeholder="Search borrower ID, loan type, segment..." />
+      <div class="filter-row">
+        <select id="filterRag" class="filter-select">
+          <option value="ALL">All statuses</option>
+          <option value="RED">Red only</option>
+          <option value="AMBER">Amber only</option>
+          <option value="GREEN">Green only</option>
+        </select>
+        <select id="filterLoanType" class="filter-select">
+          <option value="ALL">All loan types</option>
+          <option value="Term Loan">Term Loan</option>
+          <option value="Working Capital">Working Capital</option>
+          <option value="Trade Finance">Trade Finance</option>
+        </select>
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="searchInput" type="text" placeholder="Search borrower ID, loan type, segment..." />
+        </div>
       </div>
     </div>
   </header>
@@ -47,6 +61,11 @@
 
     <div class="portfolio-accuracy-note" id="portfolioAccuracyNote"></div>
 
+    <section class="datasource-panel">
+      <div class="datasource-header">DATA SOURCES &middot; WHAT'S NEEDED TO RUN THIS ON A REAL LOAN BOOK</div>
+      <div class="datasource-row" id="dataSourcesRow"></div>
+    </section>
+
     <section class="spectrum-panel">
       <div class="spectrum-header">
         <span>PORTFOLIO RISK RANK SPECTRUM</span>
@@ -60,12 +79,21 @@
       </div>
     </section>
 
+    <section class="spectrum-panel">
+      <div class="spectrum-header">
+        <span>PORTFOLIO TREND &middot; 24-MONTH PANEL</span>
+        <span class="spectrum-sub">RAG mix across the full monitored portfolio over time &mdash; the evidence for early warning, not a point-in-time snapshot</span>
+      </div>
+      <div id="portfolioTrendWrap" style="height:150px;"><canvas id="portfolioTrendChart"></canvas></div>
+    </section>
+
     <section class="table-panel">
       <div class="table-header-row">
         <div class="table-title">MONITORED ACCOUNTS <span id="accountCount"></span></div>
         <div class="table-sort">
           <button class="sort-btn active" data-sort="risk">Sort: Highest risk first</button>
           <button class="sort-btn" data-sort="rank">Sort: Rank</button>
+          <button class="sort-btn" data-sort="worsened">Sort: Recently worsened</button>
         </div>
       </div>
       <div class="table-wrap">
@@ -84,6 +112,11 @@
           </thead>
           <tbody id="accountsTbody"></tbody>
         </table>
+      </div>
+      <div class="pagination" id="pagination">
+        <button id="pagePrev" class="page-btn">&larr; Prev</button>
+        <span id="pageInfo" class="page-info"></span>
+        <button id="pageNext" class="page-btn">Next &rarr;</button>
       </div>
     </section>
   </div>

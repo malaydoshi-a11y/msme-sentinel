@@ -50,6 +50,7 @@ It directly targets both gaps IDBI named: accuracy (16–22% today → we demons
 - Human-in-the-loop by design — decision support, not autonomous approval/rejection
 - Fully documented, reproducible ML pipeline, with every feature traced to a cited real practice (see `docs/domain_research.md`)
 - Architecture designed for drop-in replacement of synthetic data with IDBI's real sandbox datasets, no rebuild required
+- Deploys as a **modular scoring service alongside the existing core banking system**, not a replacement — API/batch ingestion per data source, private-VPC deployment for RBI data-residency compliance (see `docs/integration_architecture.md`)
 
 ---
 
@@ -84,7 +85,7 @@ It directly targets both gaps IDBI named: accuracy (16–22% today → we demons
 - **Pandas / NumPy / PyArrow** — data pipeline
 - **HTML5 / CSS3 / vanilla JavaScript** — RAG dashboard (framework-free, fast, easy to audit)
 - **Chart.js** — score spectrum & account trajectory visualizations
-- **AWS-compatible static hosting** (S3 + CloudFront, or Amplify) — aligned with IDBI's AWS-based sandbox
+- **Static hosting for this demo** — this submission's public link, for judge access only; a production pilot would run inside IDBI's own network (on-prem or a private AWS VPC, India region), not a public URL — see `docs/integration_architecture.md`
 - **GitHub** — version control, CI-ready repo structure
 
 ---
@@ -136,6 +137,12 @@ Phased, matching the rollout tiers above rather than one lump estimate:
 - **Phase 1 (immediate, on sandbox access):** Bureau/CIBIL MSME Rank + bank transactions (Account Aggregator) + GST returns (GSP/AA) + cheque/NACH bounce data — all available today via mature, existing channels. Per our feature-importance analysis, this alone carries most of the model's discriminative power.
 - **Phase 2 (as AA consent coverage grows):** UPI transaction behavior, added once a borrower completes Account Aggregator consent.
 - **Phase 3 (opportunistic enrichment, never a blocker):** EPFO contribution regularity and utility payment history — directionally valuable (and both raised by IDBI's own team), but the weakest data-infrastructure maturity today. EPFO in particular is structurally unavailable for MSMEs with no registered employees, not just thin — our model handles this as an explicit missing-data case, not a fabricated number, and the same design would apply to real deployment.
+
+**How this connects to IDBI's systems, not just a standalone demo:**
+- Runs as a **modular scoring service alongside the existing core banking system** (e.g. Finacle) — not a replacement, and no change to existing loan origination or credit committee workflow.
+- **Ingestion:** API/consent-based where already mature (bureau pull via IDBI's existing subscription, Account Aggregator consent for bank transactions, GSP API for GST) and a nightly batch (CSV/SFTP or read-replica) fallback for NACH/cheque bounce data, since it lives inside core banking's own database — a pragmatic Phase 1 path that needs no new real-time hooks into core banking on day one.
+- **Deployment:** the public link in this submission is a demo for judging only. A real pilot runs inside IDBI's own network boundary — on-prem or a private VPC in an India AWS region (Mumbai/Hyderabad), consistent with RBI data-residency expectations for financial data, not a public URL.
+- Full technical detail: `docs/integration_architecture.md`.
 
 Other future development:
 - Swap synthetic data for IDBI's real sandbox datasets/APIs once shortlisted — architecture requires no changes.

@@ -344,8 +344,13 @@ def train():
     with open(DATA_DIR / "metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
 
-    # portfolio-level RAG distribution for dashboard summary tiles
-    rag_dist = df["rag_status"].value_counts(normalize=True).round(4).to_dict()
+    # portfolio-level RAG distribution for dashboard summary tiles -- latest
+    # month only, matching every other "current portfolio" stat downstream.
+    # Averaging over the full 24-month panel here would mix in much older,
+    # less representative months and visibly disagree with the rank
+    # histogram and account table, which are always "as of now".
+    latest_month_df = df[df["month"] == df["month"].max()]
+    rag_dist = latest_month_df["rag_status"].value_counts(normalize=True).round(4).to_dict()
     with open(DATA_DIR / "rag_distribution.json", "w") as f:
         json.dump(rag_dist, f, indent=2)
 

@@ -18,7 +18,7 @@ Record screen + voiceover. Suggested pacing below (timestamps are targets, not r
 
 *(Point at RAG tiles, then the score spectrum)*
 
-> "Every MSME account gets a common risk rank, 1 to 10 — matching CIBIL's own MSME Rank convention, not a scale we invented. Green, Amber, Red map directly onto RBI's SMA-0, SMA-1, SMA-2 categories, so a loan officer isn't learning new vocabulary. Right now: 30% healthy, 30% watchlist, 40% high-risk. And notice — no model internals cluttering this view. This is the daily-use screen."
+> "Every MSME account gets a common risk rank, 1 to 10 — matching CIBIL's own MSME Rank convention, not a scale we invented. Green, Amber, Red map directly onto RBI's SMA-0, SMA-1, SMA-2 categories, so a loan officer isn't learning new vocabulary. Right now: 51% healthy, 29% watchlist, 19% high-risk. And notice — no model internals cluttering this view. This is the daily-use screen."
 
 *(Click the "Model Governance" tab)*
 
@@ -58,12 +58,13 @@ Record screen + voiceover. Suggested pacing below (timestamps are targets, not r
 
 **[2:25–3:00] Close — honesty about scope + what's next**
 
-> "Built on our own synthetic data, generated with a causal model so the signal is real, not random — and staged by real data-infrastructure maturity, not everything at once. IDBI's actual sandbox data plugs in directly once shortlisted, no rebuild needed. This is MSME Sentinel — not a coin flip on default, an early warning radar. Thank you."
+> "Built on our own synthetic data, generated with a causal model so the signal is real, not random — and staged by real data-infrastructure maturity, not everything at once. This runs alongside your existing core banking system, not in place of it — IDBI's actual sandbox data plugs in directly once shortlisted, no rebuild needed. This is MSME Sentinel — not a coin flip on default, an early warning radar. Thank you."
 
 ---
 
 ## Recording notes
 - Keep the browser window clean — close other tabs, use the dashboard at a normal 1300px+ width.
+- The dashboard's light, IDBI-teal theme and the "Data Sources" panel (visible right below the RAG tiles) are themselves part of the pitch — no extra narration needed, just don't scroll past them too fast during the [0:20–0:55] portfolio walkthrough.
 - Zoom in slightly on the trajectory chart moment (1:00–1:20) — it's the single most important visual in the whole video.
 - Use a quiet room / decent mic — judges will be reviewing many videos back to back; clear audio buys attention.
 - If using Loom/OBS: record at 1080p, keep it under 3:00 sharp — many hackathon rubrics cut off or penalize overage.

@@ -1,107 +1,121 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8">
 <style>
-  body { margin:0; background:#081E1B; font-family: 'IBM Plex Sans', Arial, sans-serif; }
+  body { margin:0; background:#F1F5F4; font-family: 'IBM Plex Sans', Arial, sans-serif; }
   .canvas { width:1400px; padding:50px 60px 60px; box-sizing:border-box; }
-  .title { color:#EDF4F1; font-size:22px; font-weight:600; margin-bottom:4px; letter-spacing:0.3px;}
-  .subtitle { color:#6E8983; font-size:13px; margin-bottom:30px; }
+  .title { color:#14231E; font-size:22px; font-weight:600; margin-bottom:4px; letter-spacing:0.3px;}
+  .subtitle { color:#6C7E77; font-size:13px; margin-bottom:30px; }
 
   .screen-label {
     display:flex; align-items:center; gap:10px; margin:0 0 12px;
   }
   .screen-num {
-    background:#E8672C; color:#081E1B; font-weight:700; font-size:11.5px;
+    background:#007162; color:#FFFFFF; font-weight:700; font-size:11.5px;
     border-radius:20px; padding:3px 11px; letter-spacing:0.3px;
   }
-  .screen-title { color:#EDF4F1; font-size:15px; font-weight:600; }
-  .screen-sub { color:#6E8983; font-size:12px; }
+  .screen-title { color:#14231E; font-size:15px; font-weight:600; }
+  .screen-sub { color:#6C7E77; font-size:12px; }
 
   .frame {
     position:relative;
-    background:#0C2723; border:1px solid rgba(237,244,241,0.12); border-radius:14px;
+    background:#FFFFFF; border:1px solid #DCE4E1; border-radius:14px;
+    box-shadow: 0 1px 3px rgba(20,35,30,0.06);
     padding:20px 22px; margin-bottom:16px;
     display:flex; gap:18px; align-items:stretch;
   }
   .m-main { flex:1; min-width:0; }
 
   /* mock topbar */
-  .m-topbar { display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid rgba(237,244,241,0.09); margin-bottom:16px; }
+  .m-topbar { display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid #DCE4E1; margin-bottom:16px; }
   .m-brand { display:flex; align-items:center; gap:10px; }
-  .m-swatch { width:30px; height:30px; border-radius:7px; flex-shrink:0; }
-  .m-swatch.idbi { background:#007162; }
-  .m-swatch.ms { background:linear-gradient(135deg,#E8672C,#c94e1c); }
-  .m-divider { width:1px; height:24px; background:rgba(237,244,241,0.15); }
-  .m-text-lines .l1 { width:150px; height:9px; background:rgba(237,244,241,0.55); border-radius:3px; margin-bottom:6px; }
-  .m-text-lines .l2 { width:230px; height:7px; background:rgba(237,244,241,0.22); border-radius:3px; }
-  .m-topbar-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
-  .m-devcredit { display:flex; align-items:center; gap:6px; }
-  .m-devcredit .dot { width:16px; height:16px; border-radius:4px; background:#2547F2; }
-  .m-devcredit .txt { width:120px; height:8px; background:rgba(237,244,241,0.2); border-radius:3px; }
-  .m-search { width:220px; height:26px; border:1px solid rgba(237,244,241,0.15); border-radius:7px; background:#11322C; }
+  .m-swatch { width:34px; height:26px; border-radius:6px; flex-shrink:0; background:#FFFFFF; border:1px solid #DCE4E1; }
+  .m-text-lines .l1 { width:150px; height:9px; background:rgba(20,35,30,0.5); border-radius:3px; margin-bottom:6px; }
+  .m-text-lines .l2 { width:230px; height:7px; background:rgba(20,35,30,0.18); border-radius:3px; }
+  .m-search { width:200px; height:26px; border:1px solid #DCE4E1; border-radius:7px; background:#FFFFFF; }
+  .m-filter { width:80px; height:26px; border:1px solid #DCE4E1; border-radius:7px; background:#FFFFFF; }
+  .m-topbar-right { display:flex; align-items:center; gap:8px; }
 
   /* mock tabs */
-  .m-tabs { display:flex; gap:26px; margin-bottom:16px; border-bottom:1px solid rgba(237,244,241,0.09); }
-  .m-tab { font-size:12px; padding-bottom:9px; color:#A9C2BB; }
-  .m-tab.active { color:#EDF4F1; border-bottom:2px solid #E8672C; font-weight:600; }
+  .m-tabs { display:flex; gap:26px; margin-bottom:16px; border-bottom:1px solid #DCE4E1; }
+  .m-tab { font-size:12px; padding-bottom:9px; color:#44564F; }
+  .m-tab.active { color:#14231E; border-bottom:2px solid #007162; font-weight:600; }
 
   /* rag tiles */
   .m-tiles { display:flex; gap:12px; margin-bottom:14px; }
-  .m-tile { flex:1; background:#11322C; border:1px solid rgba(237,244,241,0.09); border-radius:10px; padding:12px 14px; border-left:3px solid; }
-  .m-tile.green { border-left-color:#34B378; }
-  .m-tile.amber { border-left-color:#E8A33D; }
-  .m-tile.red { border-left-color:#E1503F; }
-  .m-tile .lbl { font-size:9.5px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; margin-bottom:8px; }
-  .m-tile .val { font-family:monospace; font-size:20px; color:#EDF4F1; }
+  .m-tile { flex:1; background:#FFFFFF; border:1px solid #DCE4E1; border-radius:10px; padding:12px 14px; border-left:3px solid; }
+  .m-tile.green { border-left-color:#1E8E5A; }
+  .m-tile.amber { border-left-color:#B4790E; }
+  .m-tile.red { border-left-color:#C0392B; }
+  .m-tile .lbl { font-size:9.5px; letter-spacing:1px; color:#6C7E77; text-transform:uppercase; margin-bottom:8px; }
+  .m-tile .val { font-family:monospace; font-size:20px; }
+  .m-tile.green .val { color:#1E8E5A; }
+  .m-tile.amber .val { color:#B4790E; }
+  .m-tile.red .val { color:#C0392B; }
+
+  /* data sources */
+  .m-datasource { background:#FFFFFF; border:1px solid #DCE4E1; border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+  .m-datasource .lbl { font-size:9.5px; letter-spacing:1px; color:#6C7E77; text-transform:uppercase; margin-bottom:10px; }
+  .m-ds-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .m-ds-chip { display:flex; align-items:center; gap:6px; background:#EAF0EE; border-radius:6px; padding:5px 9px; font-size:9.5px; color:#44564F; }
+  .m-ds-tag { font-family:monospace; font-size:8px; font-weight:700; padding:1px 5px; border-radius:4px; }
+  .m-ds-tag.p1 { background:rgba(30,142,90,0.15); color:#1E8E5A; }
+  .m-ds-tag.p2 { background:rgba(180,121,14,0.15); color:#B4790E; }
+  .m-ds-tag.p3 { background:#DCE4E1; color:#44564F; }
 
   /* spectrum */
-  .m-spectrum { background:#11322C; border:1px solid rgba(237,244,241,0.09); border-radius:10px; padding:12px 14px; margin-bottom:14px; }
-  .m-spectrum .lbl { font-size:9.5px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; margin-bottom:10px; }
+  .m-spectrum { background:#FFFFFF; border:1px solid #DCE4E1; border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+  .m-spectrum .lbl { font-size:9.5px; letter-spacing:1px; color:#6C7E77; text-transform:uppercase; margin-bottom:10px; }
   .m-bars { display:flex; align-items:flex-end; gap:6px; height:46px; }
   .m-bars div { flex:1; border-radius:3px 3px 0 0; }
 
   /* table */
-  .m-table { background:#11322C; border:1px solid rgba(237,244,241,0.09); border-radius:10px; padding:10px 14px 14px; }
-  .m-table-head { display:flex; gap:14px; padding-bottom:8px; border-bottom:1px solid rgba(237,244,241,0.09); margin-bottom:8px; }
-  .m-table-head span { font-size:9px; letter-spacing:0.5px; color:#6E8983; text-transform:uppercase; }
-  .m-row { display:flex; align-items:center; gap:14px; padding:8px 0; border-bottom:1px solid rgba(237,244,241,0.06); }
-  .m-row .c { height:8px; background:rgba(237,244,241,0.18); border-radius:3px; }
+  .m-table { background:#FFFFFF; border:1px solid #DCE4E1; border-radius:10px; padding:10px 14px 14px; }
+  .m-table-head { display:flex; justify-content:space-between; align-items:center; gap:14px; padding-bottom:8px; border-bottom:1px solid #DCE4E1; margin-bottom:8px; }
+  .m-table-head-cols { display:flex; gap:14px; }
+  .m-table-head span { font-size:9px; letter-spacing:0.5px; color:#6C7E77; text-transform:uppercase; }
+  .m-table-count { font-size:9px; color:#007162; font-family:monospace; }
+  .m-row { display:flex; align-items:center; gap:14px; padding:8px 0; border-bottom:1px solid #EEF2F1; }
+  .m-row .c { height:8px; background:rgba(20,35,30,0.10); border-radius:3px; }
   .m-badge { display:inline-flex; align-items:center; gap:5px; font-size:9.5px; font-weight:600; padding:3px 8px; border-radius:14px; }
   .m-badge .d { width:5px; height:5px; border-radius:50%; }
-  .m-badge.green { background:rgba(52,179,120,0.16); color:#34B378; }
-  .m-badge.amber { background:rgba(232,163,61,0.16); color:#E8A33D; }
-  .m-badge.red { background:rgba(225,80,63,0.16); color:#E1503F; }
-  .m-badge.green .d { background:#34B378; } .m-badge.amber .d { background:#E8A33D; } .m-badge.red .d { background:#E1503F; }
+  .m-badge.green { background:rgba(30,142,90,0.13); color:#1E8E5A; }
+  .m-badge.amber { background:rgba(180,121,14,0.13); color:#B4790E; }
+  .m-badge.red { background:rgba(192,57,43,0.13); color:#C0392B; }
+  .m-badge.green .d { background:#1E8E5A; } .m-badge.amber .d { background:#B4790E; } .m-badge.red .d { background:#C0392B; }
+  .m-pagination { display:flex; justify-content:center; gap:14px; margin-top:10px; font-size:9px; color:#6C7E77; font-family:monospace; }
 
   /* drawer mock */
   .m-drawer {
     flex-shrink:0; width:224px;
-    background:#0A1F1C; border:1px solid rgba(232,103,44,0.4); border-radius:10px;
+    background:#FFFFFF; border:1px solid #DCE4E1; border-radius:10px;
+    box-shadow: 0 1px 3px rgba(20,35,30,0.06);
     padding:14px 16px;
   }
-  .m-drawer .cap { font-size:9px; letter-spacing:1px; color:#E8672C; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
-  .m-drawer .big { font-family:monospace; font-size:30px; color:#34B378; margin-bottom:2px; }
-  .m-drawer .sub { font-size:9.5px; color:#6E8983; margin-bottom:12px; }
-  .m-drawer .chart { height:60px; background:#163B34; border-radius:7px; margin-bottom:12px; }
-  .m-drawer .rline { display:flex; align-items:center; gap:6px; padding:5px 0; border-bottom:1px solid rgba(237,244,241,0.06); }
-  .m-drawer .rline .rd { width:5px; height:5px; border-radius:50%; background:#E8A33D; }
-  .m-drawer .rline .rt { flex:1; height:7px; background:rgba(237,244,241,0.16); border-radius:3px; }
+  .m-drawer .cap { font-size:9px; letter-spacing:1px; color:#007162; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
+  .m-drawer .big { font-family:monospace; font-size:30px; color:#C0392B; margin-bottom:2px; }
+  .m-drawer .sub { font-size:9.5px; color:#6C7E77; margin-bottom:12px; }
+  .m-drawer .runway { font-size:9px; color:#B4790E; margin-bottom:12px; font-weight:600; }
+  .m-drawer .chart { height:60px; background:#EAF0EE; border-radius:7px; margin-bottom:12px; }
+  .m-drawer .rline { display:flex; align-items:center; gap:6px; padding:5px 0; border-bottom:1px solid #EEF2F1; }
+  .m-drawer .rline .rd { width:5px; height:5px; border-radius:50%; background:#C0392B; flex-shrink:0; }
+  .m-drawer .rline .rt { flex:1; height:7px; background:rgba(20,35,30,0.10); border-radius:3px; }
 
   .callout {
     display:flex; gap:10px; align-items:flex-start;
-    margin-top:10px; padding:10px 14px; border:1px dashed rgba(232,103,44,0.5); border-radius:9px;
-    color:#E8A99A; font-size:11.5px; line-height:1.5;
+    margin-top:10px; padding:10px 14px; border:1px dashed rgba(0,113,98,0.4); border-radius:9px;
+    color:#33473F; font-size:11.5px; line-height:1.5; background:rgba(0,113,98,0.03);
   }
-  .callout .pill { flex-shrink:0; display:inline-block; background:rgba(232,103,44,0.15); color:#E8672C; padding:3px 9px; border-radius:20px; font-size:9.5px; font-weight:600; letter-spacing:0.4px; }
+  .callout .pill { flex-shrink:0; display:inline-block; background:rgba(0,113,98,0.12); color:#007162; padding:3px 9px; border-radius:20px; font-size:9.5px; font-weight:600; letter-spacing:0.4px; }
 
   /* governance */
-  .gov-primary { background:#163B34; border-radius:9px; padding:14px 16px; margin-bottom:12px; display:flex; align-items:center; gap:16px; }
-  .gov-primary .lbl2 { font-size:9px; letter-spacing:1px; color:#6E8983; text-transform:uppercase; }
-  .gov-primary .num { font-family:monospace; font-size:34px; color:#E8672C; }
-  .gov-primary .desc { font-size:11.5px; color:#EDF4F1; }
+  .gov-primary { background:#EAF0EE; border-radius:9px; padding:14px 16px; margin-bottom:12px; display:flex; align-items:center; gap:16px; }
+  .gov-primary .lbl2 { font-size:9px; letter-spacing:1px; color:#6C7E77; text-transform:uppercase; }
+  .gov-primary .num { font-family:monospace; font-size:34px; color:#007162; }
+  .gov-primary .desc { font-size:11.5px; color:#14231E; }
   .gov-grid { display:flex; gap:12px; margin-bottom:12px; }
-  .gov-card { flex:1; background:#163B34; border-radius:9px; padding:10px 12px; }
-  .gov-card .v { font-family:monospace; font-size:16px; color:#EDF4F1; }
-  .gov-card .l { font-size:9.5px; color:#A9C2BB; margin-top:3px; }
+  .gov-card { flex:1; background:#EAF0EE; border-radius:9px; padding:10px 12px; }
+  .gov-card .v { font-family:monospace; font-size:16px; color:#14231E; }
+  .gov-card .l { font-size:9.5px; color:#44564F; margin-top:3px; }
 </style></head>
 <body>
 <div class="canvas">
@@ -118,13 +132,12 @@
    <div class="m-main">
     <div class="m-topbar">
       <div class="m-brand">
-        <div class="m-swatch idbi"></div>
-        <div class="m-divider"></div>
-        <div class="m-swatch ms"></div>
+        <div class="m-swatch"></div>
         <div class="m-text-lines"><div class="l1"></div><div class="l2"></div></div>
       </div>
       <div class="m-topbar-right">
-        <div class="m-devcredit"><div class="dot"></div><div class="txt"></div></div>
+        <div class="m-filter"></div>
+        <div class="m-filter"></div>
         <div class="m-search"></div>
       </div>
     </div>
@@ -134,32 +147,48 @@
     </div>
 
     <div class="m-tiles">
-      <div class="m-tile green"><div class="lbl">Green &middot; Standard</div><div class="val">30%</div></div>
-      <div class="m-tile amber"><div class="lbl">Amber &middot; SMA-0/1</div><div class="val">30%</div></div>
-      <div class="m-tile red"><div class="lbl">Red &middot; SMA-2</div><div class="val">40%</div></div>
+      <div class="m-tile red"><div class="lbl">High Risk &middot; Rank 7&ndash;10</div><div class="val">19.4%</div></div>
+      <div class="m-tile amber"><div class="lbl">Watchlist &middot; Rank 4&ndash;6</div><div class="val">29.3%</div></div>
+      <div class="m-tile green"><div class="lbl">Healthy &middot; Rank 1&ndash;3</div><div class="val">51.2%</div></div>
+    </div>
+
+    <div class="m-datasource">
+      <div class="lbl">Data Sources &middot; what's needed to run this on a real loan book</div>
+      <div class="m-ds-row">
+        <div class="m-ds-chip"><span class="m-ds-tag p1">P1</span>Bureau / CIBIL Rank</div>
+        <div class="m-ds-chip"><span class="m-ds-tag p1">P1</span>Bank Txns (AA)</div>
+        <div class="m-ds-chip"><span class="m-ds-tag p1">P1</span>GST Returns</div>
+        <div class="m-ds-chip"><span class="m-ds-tag p1">P1</span>NACH Bounce</div>
+        <div class="m-ds-chip"><span class="m-ds-tag p2">P2</span>UPI Behaviour</div>
+        <div class="m-ds-chip"><span class="m-ds-tag p3">P3</span>EPFO</div>
+        <div class="m-ds-chip"><span class="m-ds-tag p3">P3</span>Utility Payments</div>
+      </div>
     </div>
 
     <div class="m-spectrum">
       <div class="lbl">Portfolio Risk Rank Spectrum &middot; 1&ndash;10, CIBIL-MSME-Rank-style</div>
       <div class="m-bars">
-        <div style="height:38%;background:#34B378"></div>
-        <div style="height:55%;background:#34B378"></div>
-        <div style="height:70%;background:#34B378"></div>
-        <div style="height:48%;background:#E8A33D"></div>
-        <div style="height:62%;background:#E8A33D"></div>
-        <div style="height:44%;background:#E8A33D"></div>
-        <div style="height:80%;background:#E1503F"></div>
-        <div style="height:95%;background:#E1503F"></div>
-        <div style="height:65%;background:#E1503F"></div>
-        <div style="height:40%;background:#E1503F"></div>
+        <div style="height:70%;background:#1E8E5A"></div>
+        <div style="height:55%;background:#1E8E5A"></div>
+        <div style="height:38%;background:#1E8E5A"></div>
+        <div style="height:44%;background:#B4790E"></div>
+        <div style="height:62%;background:#B4790E"></div>
+        <div style="height:48%;background:#B4790E"></div>
+        <div style="height:40%;background:#C0392B"></div>
+        <div style="height:65%;background:#C0392B"></div>
+        <div style="height:95%;background:#C0392B"></div>
+        <div style="height:80%;background:#C0392B"></div>
       </div>
     </div>
 
     <div class="m-table">
       <div class="m-table-head">
+        <div class="m-table-head-cols">
         <span style="width:70px">Borrower</span><span style="width:90px">Loan Type</span>
         <span style="width:110px">Segment</span><span style="width:60px">Vintage</span>
         <span style="width:110px">Loan Amt</span><span style="width:60px">Rank</span><span style="width:100px">Status</span>
+        </div>
+        <span class="m-table-count">6,000 accounts</span>
       </div>
       <div class="m-row">
         <div class="c" style="width:70px"></div><div class="c" style="width:90px"></div>
@@ -179,23 +208,25 @@
         <div class="c" style="width:110px"></div><div class="c" style="width:24px"></div>
         <span class="m-badge red"><span class="d"></span>SMA-2</span>
       </div>
+      <div class="m-pagination">&larr; Prev &middot; Page 1 of 120 &middot; Next &rarr;</div>
     </div>
 
     <div class="callout">
       <span class="pill">DESIGN NOTE</span>
       Rank number stays neutral in the table — the Status badge (color + text label, never color-only) is the single
-      source of RAG signal. Avoids double-coding the same status twice, and keeps the badge legible for colorblind
-      reviewers and printed audit reports.
+      source of RAG signal. Filterable by status and loan type, browsable across the full monitored portfolio, not a
+      curated sample.
     </div>
    </div>
 
     <div class="m-drawer">
       <div class="cap">Drill-Down Drawer</div>
       <div class="sub" style="margin-bottom:10px;">slides in on row click</div>
-      <div class="big">4</div>
-      <div class="sub">MSME Risk Rank &middot; PD 0.18</div>
+      <div class="big">8</div>
+      <div class="sub">MSME Risk Rank &middot; PD 0.43</div>
+      <div class="runway">Est. ~3 months to next risk tier</div>
       <div class="chart"></div>
-      <div class="cap" style="margin-bottom:6px;">Reason Codes (SHAP)</div>
+      <div class="cap" style="margin-bottom:6px;">Reason Codes (SHAP, quantified)</div>
       <div class="rline"><div class="rd"></div><div class="rt"></div></div>
       <div class="rline"><div class="rd"></div><div class="rt"></div></div>
       <div class="rline"><div class="rd"></div><div class="rt"></div></div>
@@ -204,8 +235,9 @@
 
   <div class="callout" style="margin-bottom:34px;">
     <span class="pill">WHY A DRAWER</span>
-    Clicking any row opens the 24-month trajectory chart + plain-English SHAP reason codes in-place, so the officer
-    never loses the portfolio table context while reviewing one account.
+    Clicking any row opens the 24-month trajectory chart, an estimated runway to the next risk tier, and quantified
+    SHAP reason codes (value vs. the account's own recent history) in-place, so the officer never loses the
+    portfolio table context while reviewing one account.
   </div>
 
   <div class="screen-label">

@@ -144,6 +144,8 @@ Not every alternative-data signal in this model is equally ready to plug into a 
 
 Full reasoning and sourcing: [`docs/data_feasibility_tiering.md`](docs/data_feasibility_tiering.md).
 
+**How this actually connects to IDBI's systems** — the ingestion pattern (API vs. batch, per source), deployment model (private VPC, not the public demo link), and what changes going from this prototype to a production pilot: [`docs/integration_architecture.md`](docs/integration_architecture.md).
+
 ## Roadmap
 
 - Swap synthetic data for IDBI's real sandbox datasets/APIs — architecture requires no changes.
