@@ -9,6 +9,8 @@
 **IDBI Innovate 2026 — Track 04: MSME Credit Predictive AI Risk Management**
 **A prototype for IDBI Bank, developed by Guardinger Advanced Technologies**
 
+**Live demo: [msme-sentinel.vercel.app](https://msme-sentinel.vercel.app/)** — the full 6,000-account portfolio, filterable and live, no setup required.
+
 ---
 
 ## The problem, as IDBI framed it
@@ -28,8 +30,10 @@ A single-shot, point-in-time classifier overclaims what a model can honestly del
 3. **Scores** each account with a segment-aware XGBoost ensemble, properly corrected for class imbalance (not optimized for a misleading raw-accuracy number).
 4. **Calibrates** the raw probability into one common, comparable **CMR-style MSME Risk Rank (1–10)** — deliberately matching the real **CIBIL MSME Rank (CMR)** convention already used across Indian MSME lending for this exact exposure band and 12-month horizon, not the 300–900 scale used for personal/individual credit. A single scale across every loan type and borrower segment, resolving IDBI's "unified vs. segmented" ask with a concrete hybrid answer.
 5. **Maps RAG status onto RBI's real SMA-0/SMA-1/SMA-2 early-warning classification** — not an invented 3-tier scheme. Green = Standard asset, Amber = SMA-0/SMA-1 territory, Red = SMA-2 (one step from NPA).
-6. **Explains** every score with SHAP-derived, plain-English reason codes grounded in real underwriting signals (GSTR-1 vs GSTR-3B turnover consistency, GST filing compliance, EPFO regularity, cheque/NACH bounce rate) — risk drivers for stressed accounts, protective factors for healthy ones.
-7. **Presents** it all in a RAG (Red/Amber/Green) loan-officer dashboard with per-account trajectory charts — a decision-support tool. **The AI advises; the underwriter decides** — human-in-the-loop by design, not an autonomous approval/rejection engine.
+6. **Explains** every score with SHAP-derived, plain-English reason codes grounded in real underwriting signals (GSTR-1 vs GSTR-3B turnover consistency, GST filing compliance, EPFO regularity, cheque/NACH bounce rate) — each one quantified with its actual value and how it's moved over the account's own recent history, not just a label, and tagged with which data source it came from.
+7. **Estimates a runway** to the next risk tier per account (a disclosed linear-extrapolation heuristic on top of the model's own trajectory, not a second model) and surfaces **rank movement** month over month, so an officer sees what's *newly* deteriorating, not just the same accounts they already know about.
+8. **Tags every data source by real-world readiness** — Phase 1 (live channels IDBI already has: bureau, Account Aggregator bank transactions, GST, NACH bounce), Phase 2 (UPI, consent coverage still maturing), Phase 3 (EPFO, utility — opportunistic, never a blocker) — sourced from one manifest (`src/ingestion.py`) that both the dashboard's Data Sources panel and every reason code read from, so this isn't just a claim in a doc.
+9. **Presents** it all across the full 6,000-account portfolio — filterable by status and loan type, paginated, not a curated sample — in a RAG (Red/Amber/Green) loan-officer dashboard with per-account trajectory charts. **The AI advises; the underwriter decides** — human-in-the-loop by design, not an autonomous approval/rejection engine.
 
 See [`docs/domain_research.md`](docs/domain_research.md) for the full sourcing behind every feature and design choice above.
 
@@ -60,6 +64,16 @@ IDBI's real synthetic sandbox datasets and APIs are only released to shortlisted
 
 We deliberately did **not** substitute a real but domain-mismatched public dataset (e.g. personal/consumer credit datasets like Home Credit Default Risk) just to claim "real data" — that's a different lending domain (individual consumer credit vs. MSME business credit) and would be a worse choice than transparent, well-calibrated synthetic data, not a better one. Instead, we anchored our synthetic panel's overall stress rate to **real, published RBI/Finance Ministry MSME-sector Gross NPA figures** (9.87% in March 2021, down to 3.27% in September 2025) — see [`docs/data_calibration_note.md`](docs/data_calibration_note.md) for the full sourcing and reasoning. The individual borrower records are synthetic (necessarily — no public dataset pairs Indian MSME defaults with GST/UPI/EPFO signals), but the *rate* they're calibrated to is real and cited, not invented.
 
+## The dashboard
+
+![Portfolio View](docs/screenshots/dashboard_portfolio.png)
+
+Full 6,000-account portfolio, filterable by status and loan type, with a 24-month portfolio-level trend chart and a live Data Sources panel (tagging which alt-data channels are production-ready today vs. staged). Click any account for the drill-down below.
+
+![Account drill-down](docs/screenshots/dashboard_drawer.png)
+
+24-month trajectory, an estimated runway to the next risk tier, and quantified reason codes (each with its actual value, how it's moved over the last 6 months, and which data-source phase it came from) — not just a score and a label.
+
 ## Architecture
 
 ![Architecture Diagram](docs/diagrams/architecture.png)
@@ -74,19 +88,36 @@ We deliberately did **not** substitute a real but domain-mismatched public datas
 msme-sentinel/
 ├── src/
 │   ├── data_generator.py     # Synthetic MSME data engine (causal default generation)
-│   ├── features.py           # Snapshot + trend/slope feature engineering
-│   ├── train_model.py        # Model training, calibration, SHAP, metrics
-│   └── dashboard_export.py   # Curated dataset export for the dashboard
+│   ├── features.py           # Snapshot + trend/slope + interaction feature engineering
+│   ├── ingestion.py           # Data-source manifest: phase, real integration path, owned
+│   │                          #   columns -- single source of truth for the dashboard's
+│   │                          #   Data Sources panel and per-reason-code phase tags
+│   ├── train_model.py        # Model training, hyperparameter search, calibration, SHAP
+│   └── dashboard_export.py   # Scores + exports the full portfolio for the dashboard
 ├── dashboard/
-│   ├── index.html            # RAG loan-officer dashboard
+│   ├── index.html            # RAG loan-officer dashboard (light, IDBI-branded theme)
 │   ├── style.css
 │   ├── app.js
-│   ├── data.json             # Exported dashboard dataset
+│   ├── data.json             # Lightweight index: all 6,000 accounts, fast initial load
+│   ├── details.json           # Per-account trajectory + reasons, lazy-loaded on first click
+│   ├── assets/                # Logos (IDBI, Guardinger)
 │   └── vendor/chart.umd.js   # Vendored Chart.js (no external CDN dependency)
+├── scripts/
+│   └── smoke_test.py          # Pre-deploy check: data.json/details.json valid & consistent
 ├── data/                      # Generated datasets + trained model + metrics (gitignored bulk files)
 ├── docs/
-│   ├── diagrams/              # Architecture & process-flow diagrams
-│   └── metrics_note.md        # Why we report AUC/KS/Gini instead of raw accuracy
+│   ├── domain_research.md            # Sourcing for every feature and design choice
+│   ├── metrics_note.md               # Why balanced accuracy is primary, AUC/KS/Gini supporting
+│   ├── data_calibration_note.md      # RBI NPA-rate sourcing for the synthetic default rate
+│   ├── data_feasibility_tiering.md   # Which alt-data signals are adoptable, and when
+│   ├── integration_architecture.md   # How this connects to IDBI's systems, technically
+│   ├── deployment_guide.md           # Push + deploy steps
+│   ├── demo_video_script.md          # 3-minute script, timed and fact-checked against live data
+│   ├── pptx_slide_content.md         # Copy for the official submission template
+│   ├── diagrams/                     # Architecture, process-flow, wireframe sources + renders
+│   └── screenshots/                  # Current dashboard screenshots (used above and in the deck)
+├── logos/                     # Source logo files (IDBI, Guardinger)
+├── LICENSE                    # MIT
 └── requirements.txt
 ```
 
