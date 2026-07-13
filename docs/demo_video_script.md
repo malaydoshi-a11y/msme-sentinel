@@ -1,70 +1,75 @@
 # MSME Sentinel — 3-Minute Demo Video Script
 
-**Goal:** In 3 minutes, a banker who has never seen this should understand (1) what problem it solves, (2) why it's different from a generic default-classifier, (3) that it actually works, on screen, live.
+**Goal:** In 3 minutes, a banker who has never seen this should understand (1) what problem it solves, (2) why it's different from a generic default-classifier, (3) that it actually works, on screen, live, at real scale — and walk away having seen every major differentiator this build actually has, not just the ones from the first draft.
 
-Record screen + voiceover. Suggested pacing below (timestamps are targets, not rigid).
+Record screen + voiceover. Suggested pacing below (timestamps are targets, not rigid). Total spoken content is timed to land at ~2:50, leaving a few seconds of buffer for screen transitions.
 
 ---
 
-**[0:00–0:20] Hook — the problem, in their own words**
+**[0:00–0:15] Hook — the problem, in their own words**
 
 *(Show the dashboard's main portfolio view as you talk)*
 
-> "IDBI's current MSME default model runs at 16 to 22 percent accuracy, and only sees about 3 months ahead. IDBI asked for 90%+ accuracy and a 12-month early warning. But raw accuracy on an imbalanced default dataset is misleading — a model that predicts 'no one defaults' can score 90% and be useless. So instead of another black-box classifier, we built MSME Sentinel: an early-warning system that tracks how an account's financial health is *trending*, not just what it looks like today."
+> "IDBI's current MSME default model runs at 16 to 22 percent accuracy, and sees about 3 months ahead. IDBI asked for 90%+ accuracy and a 12-month early warning. This is MSME Sentinel — not another point-in-time classifier. It's built on trend, not a snapshot."
 
 ---
 
-**[0:20–0:55] Portfolio view walkthrough**
+**[0:15–0:40] Portfolio view — RAG mix, the trend chart, and data feasibility**
 
-*(Point at RAG tiles, then the score spectrum)*
+*(Point at the RAG tiles, then the Portfolio Trend chart just below them, then the Data Sources panel)*
 
-> "Every MSME account gets a common risk rank, 1 to 10 — matching CIBIL's own MSME Rank convention, not a scale we invented. Green, Amber, Red map directly onto RBI's SMA-0, SMA-1, SMA-2 categories, so a loan officer isn't learning new vocabulary. Right now: 51% healthy, 29% watchlist, 19% high-risk. And notice — no model internals cluttering this view. This is the daily-use screen."
+> "Every account gets one common risk rank, 1 to 10, matching CIBIL's own MSME Rank convention. Green, Amber, Red map directly onto RBI's SMA categories. Right now: 51% healthy, 29% watchlist, 19% high-risk. This trend chart is the actual proof of early warning, not a one-time claim. And right here — every data source is tagged by how ready it is today. Phase 1 sources are live channels IDBI already has; Phase 2 and 3 are staged honestly, not oversold."
+
+---
+
+**[0:40–1:00] Model Governance tab**
 
 *(Click the "Model Governance" tab)*
 
-> "Performance metrics live in their own tab, on purpose. Balanced accuracy: 82.75%, correctly measured for imbalanced data — the metric IDBI actually asked for, done right. AUC-ROC 0.90, KS-statistic 0.66 back it up as real discriminative power."
+> "Performance metrics live in their own tab, on purpose — a loan officer's daily screen shouldn't show AUC-ROC. Balanced accuracy: 82.75%, correctly measured for imbalanced data — the metric IDBI actually asked for, done right. AUC-ROC 0.90 and KS-statistic 0.66 back it up as real discriminative power, not a lucky train/test split."
 
 ---
 
-**[0:55–1:20] Click into a RED account — the core differentiator**
+**[1:00–1:20] Back to Portfolio — full scale, filters, and what's NEW**
 
-*(Click a red account, let the drawer slide open, point at the trajectory chart)*
+*(Click back to Portfolio View, point at the account count, then the filter dropdowns, then click "Sort: Recently worsened")*
 
-> "Here's an account currently flagged red — rank 10 out of 10, one step from RBI's SMA-2 category. But look at this chart — this isn't a single prediction, it's a 24-month trajectory. You can see the account was actually stable, even in the watch zone, several months ago, and has been steadily deteriorating since. That trend — not a one-off snapshot — is what gives a loan officer real runway to act, months before a default would actually happen."
-
----
-
-**[1:20–1:45] Explainability — the human-in-the-loop piece**
-
-*(Point at the reason codes list)*
-
-> "AI shouldn't replace the underwriter, it should give reasons. Every rank ships with plain-English drivers — irregular EPFO contributions, a widening GSTR-1 vs GSTR-3B gap, rising bounce rate. No black box. The underwriter sees why, and makes the final call."
+> "This isn't a curated sample of 40 accounts — it's the full 6,000-account monitored book, filterable by status and loan type. Early warning means catching what's *new*. Sort by 'recently worsened,' and the accounts that just deteriorated rise straight to the top."
 
 ---
 
-**[1:45–2:05] Click a GREEN account — showing it's not just alarmist**
+**[1:20–1:55] Click into a flagged account — trajectory, runway, and quantified reasons**
+
+*(Search for or scroll to account MSME102011 — rank 8, a clean example — click it and let the drawer slide open)*
+
+> "Here's an account at rank 8, one step into RBI's SMA-2 territory. This chart is a 24-month trajectory — it actually recovered to healthy mid-panel, then relapsed, jumping four ranks worse this month. Here's the runway: an estimated 3 months before it crosses further, a number an officer can actually plan around. Every reason is quantified too, not just labeled — GST turnover consistency, 0.70 now versus 0.88 six months ago, tagged Phase 1. No black box — the underwriter sees the evidence and makes the final call."
+
+---
+
+**[1:55–2:10] Click a GREEN account — not just alarmist**
 
 *(Click a healthy account)*
 
-> "It's not just flagging risk — a healthy account shows *why* it's healthy: consistent GST filings, strong utility payment discipline. Confidence, not noise."
+> "Click a healthy account and it explains itself the same way — consistent GST filings, stable cash flow. Confidence, not noise."
 
 ---
 
-**[2:05–2:25] New-to-Credit handling (quick mention)**
+**[2:10–2:25] New-to-Credit handling (quick mention)**
 
-> "For new-to-credit borrowers with thin GST or bureau history — a gap IDBI flagged directly — the model falls back on alternative signals instead of auto-rejecting blank-slate applicants."
+> "For thin-file, new-to-credit borrowers — a gap IDBI flagged directly — the model falls back on alternative signals instead of auto-rejecting a blank slate."
 
 ---
 
-**[2:25–3:00] Close — honesty about scope + what's next**
+**[2:25–2:50] Close — honesty about scope, integration, and what's next**
 
-> "Built on our own synthetic data, generated with a causal model so the signal is real, not random — and staged by real data-infrastructure maturity, not everything at once. This runs alongside your existing core banking system, not in place of it — IDBI's actual sandbox data plugs in directly once shortlisted, no rebuild needed. This is MSME Sentinel — not a coin flip on default, an early warning radar. Thank you."
+> "Built on our own synthetic data, generated causally so the signal is real — staged by actual data maturity, not everything at once. This runs alongside your existing core banking system, not in place of it — IDBI's real sandbox data plugs in directly once shortlisted. This is MSME Sentinel — not a coin flip on default, an early-warning radar a loan officer can actually use. Thank you."
 
 ---
 
 ## Recording notes
 - Keep the browser window clean — close other tabs, use the dashboard at a normal 1300px+ width.
-- The dashboard's light, IDBI-teal theme and the "Data Sources" panel (visible right below the RAG tiles) are themselves part of the pitch — no extra narration needed, just don't scroll past them too fast during the [0:20–0:55] portfolio walkthrough.
-- Zoom in slightly on the trajectory chart moment (1:00–1:20) — it's the single most important visual in the whole video.
+- **Use account `MSME102011` for the [1:20–1:55] drill-down beat** — verified against the live data: rank 8, a genuine +4 rank jump last month, a populated runway estimate (~3.3 months, not "already at highest tier" or "stable"), and clean quantified reason codes across two different data-source phases (GST = Phase 1, utility = Phase 3). Search its ID directly rather than hunting through the table live.
+- The 0.70 vs 0.88 GST figure in the script is this account's real, current exported value — don't paraphrase it into a round number, and don't reuse it if you re-export the data before recording (re-run `python scripts/smoke_test.py` and re-check the account's numbers in `dashboard/details.json` if you regenerate data first).
+- The dashboard's light, IDBI-teal theme and the Data Sources panel are themselves part of the pitch — don't scroll past them too fast during [0:15–0:40].
 - Use a quiet room / decent mic — judges will be reviewing many videos back to back; clear audio buys attention.
-- If using Loom/OBS: record at 1080p, keep it under 3:00 sharp — many hackathon rubrics cut off or penalize overage.
+- If using Loom/OBS: record at 1080p, keep it under 3:00 sharp — many hackathon rubrics cut off or penalize overage. This script's spoken content lands around 2:50; the remaining ~10s is buffer for clicks/transitions, not more talking.
